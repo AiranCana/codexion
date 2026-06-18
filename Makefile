@@ -1,8 +1,8 @@
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra -pthread
 NAME = codexion
 
 
-SOURCE = parser.c
+SOURCE = $(wildcard *.c)
 
 OBJ = $(SOURCE:.c=.o)
 
@@ -106,8 +106,7 @@ $(NAME): $(OBJ)
 	@ echo "                                                                      .*@@@@@@@@@@@@@@@@@@#=                                                           "
 	@ echo "                                                                                                                                                       "
 	@ echo "                                                                                                                                                       " 
-	@cc $(FLAGS) $(OBJ) -o $(NAME); \
-	clean
+	@cc $(FLAGS) $(OBJ) -o $(NAME);
 
 %.o: %.c
 	@cc -c $(CFLAGS) $< -o $@
