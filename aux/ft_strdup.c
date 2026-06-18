@@ -1,39 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coders.h                                           :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 12:57:15 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/19 15:48:08 by acanadil          #+#    #+#             */
+/*   Updated: 2026/06/18 15:26:45 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODERS_H
-# define CODERS_H
+#include "aux.h"
 
-typedef enum e_schedule
+char	*ft_strdup(const char *s)
 {
-	FIFO,
-	EDF
-}	t_schedule;
+	void	*alloc;
+	char	*dest;
+	size_t	len;
 
-typedef struct s_data
-{
-	long long	time_to_burnout;
-	long long	time_to_compile;
-	long long	time_to_debug;
-	long long	time_to_refactor;
-	long long	dongle_cooldown;
-	int			number_of_compiles_required;
-}	t_data;
-
-typedef struct s_coder
-{
-	int		coder_id;
-	int		live;
-	t_data	*data;
-}	t_coder;
-
-#endif
+	len = ft_strlen(s) + 1;
+	alloc = malloc(sizeof (char) * len);
+	if (!alloc)
+		return (NULL);
+	dest = alloc;
+	while (*s)
+	{
+		*dest = *s;
+		++dest;
+		++s;
+	}
+	*dest = *s;
+	return (alloc);
+}

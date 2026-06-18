@@ -1,39 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coders.h                                           :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 12:57:15 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/19 15:48:06 by acanadil          #+#    #+#             */
+/*   Updated: 2026/06/18 15:12:20 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODERS_H
-# define CODERS_H
+#include "aux.h"
 
-typedef enum e_schedule
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	FIFO,
-	EDF
-}	t_schedule;
+	void	*allo;
 
-typedef struct s_data
-{
-	long long	time_to_burnout;
-	long long	time_to_compile;
-	long long	time_to_debug;
-	long long	time_to_refactor;
-	long long	dongle_cooldown;
-	int			number_of_compiles_required;
-}	t_data;
-
-typedef struct s_coder
-{
-	int		coder_id;
-	int		live;
-	t_data	*data;
-}	t_coder;
-
-#endif
+	if (!nmemb || !size)
+	{
+		return (malloc(0));
+	}
+	allo = malloc(nmemb * size);
+	if (!allo)
+		return (NULL);
+	ft_bzero(allo, size * nmemb);
+	return (allo);
+}

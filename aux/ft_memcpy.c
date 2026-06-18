@@ -1,39 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coders.h                                           :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 12:57:15 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/14 12:56:26 by acanadil          #+#    #+#             */
+/*   Updated: 2026/06/18 16:02:33 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODERS_H
-# define CODERS_H
+#include "aux.h"
 
-typedef enum e_schedule
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	FIFO,
-	EDF
-}	t_schedule;
+	size_t	count;
+	char	*des;
+	char	*sr;
 
-typedef struct s_data
-{
-	long long	time_to_burnout;
-	long long	time_to_compile;
-	long long	time_to_debug;
-	long long	time_to_refactor;
-	long long	dongle_cooldown;
-	int			number_of_compiles_required;
-}	t_data;
-
-typedef struct s_coder
-{
-	int		coder_id;
-	int		live;
-	t_data	*data;
-}	t_coder;
-
-#endif
+	if (!dest && !src)
+		return (dest);
+	sr = (char *) src;
+	des = dest;
+	count = 0;
+	while (count != n)
+	{
+		des[count] = sr[count];
+		++count;
+	}
+	return (dest);
+}

@@ -1,39 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coders.h                                           :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 12:57:15 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/13 13:42:54 by acanadil          #+#    #+#             */
+/*   Updated: 2026/06/18 16:09:18 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODERS_H
-# define CODERS_H
-
-typedef enum e_schedule
+int	ft_isdigit(int c)
 {
-	FIFO,
-	EDF
-}	t_schedule;
-
-typedef struct s_data
-{
-	long long	time_to_burnout;
-	long long	time_to_compile;
-	long long	time_to_debug;
-	long long	time_to_refactor;
-	long long	dongle_cooldown;
-	int			number_of_compiles_required;
-}	t_data;
-
-typedef struct s_coder
-{
-	int		coder_id;
-	int		live;
-	t_data	*data;
-}	t_coder;
-
-#endif
+	if (c <= 57 && c >= 48)
+		return (1);
+	return (0);
+}

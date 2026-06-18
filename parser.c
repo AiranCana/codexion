@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 10:32:54 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 11:56:32 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/18 16:16:25 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "coders.h"
-
+#include "aux/aux.h"
 
 static int	alpha_verif(char *arg)
 {
@@ -25,14 +25,12 @@ static int	alpha_verif(char *arg)
 		return (0);
 	while (arg[i])
 	{
-		if (arg[i] < 65 || arg[i] > 122)
-			return (0);
-		else if (arg[i] > 90 && arg[i] < 97)
+		if (!ft_isalpha(arg[i]))
 			return (0);
 		i++;
 	}
-	if (strcmp(arg, "fifo") != 0 && strcmp(arg, "edf") != 0)
-		return (0);
+	// if (strcmp(arg, "fifo") != 0 && strcmp(arg, "edf") != 0)
+	// 	return (0);
 	return (1);
 }
 
@@ -45,7 +43,7 @@ static int	numeric_verif(char *arg)
 		return (0);
 	while (arg[i])
 	{
-		if (arg[i] < '0' || arg[i] > '9')
+		if (!ft_isdigit(arg[i]))
 			return (0);
 		i++;
 	}
@@ -57,9 +55,9 @@ static int	valid_data(int argc, char **argv)
 	int	i;
 
 	i = 0;
-	if (argc != 9)
+	if (argc != 9 && argc != )
 	{
-		fprintf(stderr, "argument no valid");
+		fprintf(stderr, "argument no valid1");
 		return (0);
 	}
 	i++;
@@ -67,14 +65,14 @@ static int	valid_data(int argc, char **argv)
 	{
 		if (!numeric_verif(argv[i]))
 		{
-			fprintf(stderr, "argument no valid");
+			fprintf(stderr, "argument no valid2");
 			return (0);
 		}
 		i++;
 	}
 	if (!alpha_verif(argv[i]))
 	{
-		fprintf(stderr, "argument no valid");
+		fprintf(stderr, "argument no valid3");
 		return (0);
 	}
 	printf("argument valid");

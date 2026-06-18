@@ -1,39 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coders.h                                           :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 12:57:15 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/14 15:21:13 by acanadil          #+#    #+#             */
+/*   Updated: 2026/06/18 15:27:03 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODERS_H
-# define CODERS_H
+#include "aux.h"
 
-typedef enum e_schedule
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	FIFO,
-	EDF
-}	t_schedule;
+	const char	*sol;
+	char		*dest;
+	size_t		count;
 
-typedef struct s_data
-{
-	long long	time_to_burnout;
-	long long	time_to_compile;
-	long long	time_to_debug;
-	long long	time_to_refactor;
-	long long	dongle_cooldown;
-	int			number_of_compiles_required;
-}	t_data;
-
-typedef struct s_coder
-{
-	int		coder_id;
-	int		live;
-	t_data	*data;
-}	t_coder;
-
-#endif
+	count = 0;
+	sol = src;
+	dest = dst;
+	if (size <= 0)
+		return (ft_strlen(sol));
+	while (*src && (size - 1) > count++)
+	{
+		*dest = *src;
+		++dest;
+		++src;
+	}
+	*dest = '\0';
+	return (ft_strlen(sol));
+}
