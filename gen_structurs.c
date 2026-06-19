@@ -38,7 +38,7 @@ static void	delet_coder(t_coder *coder)
 
 void	*delet_coders(t_coder **coder)
 {
-	int	i;
+	int		i;
 	t_data	*data;
 
 	data = NULL;
