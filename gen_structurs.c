@@ -33,23 +33,24 @@ t_coder	*gen_coder(int coder_id, t_data *data)
 static void	delet_coder(t_coder *coder)
 {
 	if (coder)
-	{
-		if (coder -> data)
-			free(coder -> data);
 		free(coder);
-	}
 }
 
 void	*delet_coders(t_coder **coder)
 {
 	int	i;
+	t_data	*data;
 
+	data = NULL;
 	i = 0;
 	while (coder[i])
 	{
+		data = coder[i]->data;
 		delet_coder(coder[i]);
 		i++;
 	}
+	if (data)
+		free(data);
 	free(coder);
 	return (NULL);
 }
