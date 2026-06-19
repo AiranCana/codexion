@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_memlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 15:21:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 15:27:03 by acanadil         ###   ########.fr       */
+/*   Created: 2026/06/19 10:22:30 by acanadil          #+#    #+#             */
+/*   Updated: 2026/06/19 10:22:30 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+size_t	ft_memlen(const void *s)
 {
-	const char	*sol;
-	char		*dest;
-	size_t		count;
+	size_t	len;
 
-	count = 0;
-	sol = src;
-	dest = dst;
-	if (size <= 0)
-		return (ft_strlen(sol));
-	while (*src && (size - 1) > count++)
-	{
-		*dest = *src;
-		++dest;
-		++src;
-	}
-	*dest = '\0';
-	return (ft_strlen(sol));
+	len = 0;
+	while (((char *)s)[len])
+		len++;
+	return (len);
 }

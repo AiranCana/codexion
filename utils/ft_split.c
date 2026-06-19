@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "aux.h"
+#include "utils.h"
 
 static void	release(char **sol, size_t len)
 {

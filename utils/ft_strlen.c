@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "aux.h"
+#include "utils.h"
 
 size_t	ft_strlen(const char *line)
 {

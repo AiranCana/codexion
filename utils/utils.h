@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef AUX_H
-# define AUX_H
+#ifndef UTILS_H
+# define UTILS_H
 
 # include <stdlib.h>
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+size_t	ft_memlen(const void *s);
 size_t	ft_strlen(const char *str);
 
 char	**ft_split(char const *s, char c);
@@ -29,6 +30,8 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 void	ft_bzero(void *s, size_t n);
 long	ft_atol(const char *str);
+
+int		ft_atoi(const char *nptr);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 

@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "aux.h"
+#include "utils.h"
 
 long	ft_atol(const char *nptr)
 {
-	int	num;
-	int	sign;
+	long	num;
+	int		sign;
 
 	sign = 1;
 	num = 0;

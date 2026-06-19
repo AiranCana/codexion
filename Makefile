@@ -3,7 +3,7 @@ NAME = codexion
 
 
 SOURCE = $(wildcard *.c) \
-$(wildcard aux/*.c)
+$(wildcard utils/*.c)
 
 OBJ = $(SOURCE:.c=.o)
 

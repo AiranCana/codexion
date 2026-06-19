@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "coders.h"
-#include "aux/aux.h"
+#include "utils/utils.h"
 
 static int	alpha_verif(char *arg)
 {
@@ -29,8 +29,8 @@ static int	alpha_verif(char *arg)
 			return (0);
 		i++;
 	}
-	// if (strcmp(arg, "fifo") != 0 && strcmp(arg, "edf") != 0)
-	// 	return (0);
+	if (strcmp(arg, "fifo") != 0 && strcmp(arg, "edf") != 0)
+		return (0);
 	return (1);
 }
 
@@ -55,40 +55,64 @@ static int	valid_data(int argc, char **argv)
 	int	i;
 
 	i = 0;
-	if (argc != 9 && argc != )
+	if (argc != 8)
 	{
-		fprintf(stderr, "argument no valid1");
+		printer_error("");
 		return (0);
 	}
-	i++;
 	while (argv[i + 1])
 	{
 		if (!numeric_verif(argv[i]))
 		{
-			fprintf(stderr, "argument no valid2");
+			printer_error("Invalid argument: not a number");
 			return (0);
 		}
 		i++;
 	}
 	if (!alpha_verif(argv[i]))
 	{
-		fprintf(stderr, "argument no valid3");
+		printer_error("Invalid argument: not a valid scheduler type");
 		return (0);
 	}
 	printf("argument valid");
 	return (1);
 }
 
-int	main(int argc, char **argv)
+static t_data	*gen_data(int argc, char **argv)
 {
-	int		number_of_coders;
 	t_data	*data;
-	t_coder	**coders;
-	char	*scheduler;
 
 	if (valid_data(argc, argv))
 	{
-		argv++;
+		data = init_data(argc, argv);
+		if (!data)
+			return (NULL);
+		return (data);
 	}
-	return (0);
+	return (NULL);
+}
+
+t_coder	**init_coders(int argc, char **argv)
+{
+	t_data	*data;
+	t_coder	**coders;
+	int		i;
+	int		num_coders;
+
+	i = 0;
+	data = gen_data(argc, argv);
+	if (!data)
+		return (NULL);
+	num_coders = atoi(argv[0]);
+	coders = ft_calloc(sizeof(t_coder *), (num_coders + 1));
+	if (!coders)
+		return (NULL);
+	while (i < num_coders)
+	{
+		coders[i] = gen_coder(i + 1, data);
+		if (!coders[i])
+			return (delet_coders(coders));
+		i++;
+	}
+	return (coders);
 }

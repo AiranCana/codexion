@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "aux.h"
+#include "utils.h"
 
 static int	isfound(char s, char const *set)
 {
