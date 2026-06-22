@@ -6,12 +6,13 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 10:51:03 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/19 10:51:03 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/22 16:02:11 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 #include "utils/utils.h"
+#include "generate/generate.h"
 #include <stdio.h>
 
 void	free_split(char **args)
@@ -39,15 +40,26 @@ int	printer_error(char *message)
 void	execute_program(int argc, char **argv, int spliter)
 {
 	t_coder	**coders;
+	t_USB	**usb;
 
 	coders = init_coders(argc, argv);
 	if (!coders)
+		return ;
+	usb = gen_usbs(ft_structurlen((const void **)coders));
+	if (!coders || !usb)
 	{
 		if (spliter)
 			free_split(argv);
+		if (coders)
+			delet_coders(coders);
+		if (usb)
+			delet_usbs(usb);
 		printer_error("Memory allocation failed");
 		return ;
 	}
+	asign_usb(usb, coders);
+	// print_all_coders(coders);
+	delet_usbs(usb);
 	delet_coders(coders);
 }
 

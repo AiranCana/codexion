@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 10:32:54 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 16:16:25 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/22 15:53:01 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <string.h>
 #include "coders.h"
 #include "utils/utils.h"
+#include "generate/generate.h"
 
 static int	alpha_verif(char *arg)
 {
@@ -29,8 +30,11 @@ static int	alpha_verif(char *arg)
 			return (0);
 		i++;
 	}
-	if (strcmp(arg, "fifo") != 0 && strcmp(arg, "edf") != 0)
-		return (0);
+	if (strcmp(arg, "fifo") != 0 && ft_strlen(arg) != 4)
+	{
+		if (strcmp(arg, "edf") != 0 && ft_strlen(arg) != 3)
+			return (0);
+	}
 	return (1);
 }
 
@@ -74,7 +78,7 @@ static int	valid_data(int argc, char **argv)
 		printer_error("Invalid argument: not a valid scheduler type");
 		return (0);
 	}
-	printf("argument valid");
+	printf("argument valid\n");
 	return (1);
 }
 

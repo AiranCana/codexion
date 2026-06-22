@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:06:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 16:11:06 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/22 13:27:32 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 # include <stdlib.h>
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_memlen(const void *s);
+size_t	ft_structurlen(const void **s);
 size_t	ft_strlen(const char *str);
+size_t	ft_memlen(const void *s);
 
 char	**ft_split(char const *s, char c);
 

@@ -6,12 +6,12 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:26:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 15:54:21 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/22 15:39:58 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coders.h"
-#include "utils/utils.h"
+#include "../coders.h"
+#include "../utils/utils.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -27,6 +27,7 @@ t_coder	*gen_coder(int coder_id, t_data *data)
 	coder -> coder_id = coder_id;
 	coder -> last_compile_start = 0;
 	coder -> thread_id = 0;
+	coder -> compile_count = 0;
 	return (coder);
 }
 
@@ -50,8 +51,11 @@ void	*delet_coders(t_coder **coder)
 		i++;
 	}
 	if (data)
+	{
 		free(data);
+	}
 	free(coder);
+	coder = NULL;
 	return (NULL);
 }
 
