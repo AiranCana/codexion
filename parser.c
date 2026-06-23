@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 10:32:54 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/22 15:53:01 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/23 12:29:39 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ t_coder	**init_coders(int argc, char **argv)
 	int		num_coders;
 
 	i = 0;
+	if (argc != 8)
+		return (NULL);
 	data = gen_data(argc, argv);
 	if (!data)
 		return (NULL);

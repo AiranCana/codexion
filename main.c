@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 10:51:03 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/22 16:02:11 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/23 12:59:28 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,19 @@
 #include "generate/generate.h"
 #include <stdio.h>
 
-void	free_split(char **args)
+void	free_split(char ***args)
 {
 	int	i;
 
 	i = 0;
-	while (args[i])
+	while (args[0][i])
 	{
-		free(args[i]);
+		free(args[0][i]);
+		args[0][i] = NULL;
 		i++;
 	}
-	free(args);
+	free(args[0]);
+	args[0] = NULL;
 }
 
 int	printer_error(char *message)
@@ -37,30 +39,38 @@ int	printer_error(char *message)
 	return (0);
 }
 
-void	execute_program(int argc, char **argv, int spliter)
+void	*freeser(int split, char ***argv, t_coder **cod, t_USB **us)
+{
+	if (split && argv)
+		free_split(argv);
+	if (cod)
+		delet_coders(cod);
+	if (us)
+		delet_usbs(us);
+	printer_error("Memory allocation failed");
+	return (NULL);
+}
+
+void	*execute_program(int argc, char ***argv, int spliter)
 {
 	t_coder	**coders;
 	t_USB	**usb;
+	t_table	*table;
 
-	coders = init_coders(argc, argv);
+	coders = init_coders(argc, *argv);
 	if (!coders)
-		return ;
+		return (freeser(spliter, argv, NULL, NULL));
 	usb = gen_usbs(ft_structurlen((const void **)coders));
-	if (!coders || !usb)
-	{
-		if (spliter)
-			free_split(argv);
-		if (coders)
-			delet_coders(coders);
-		if (usb)
-			delet_usbs(usb);
-		printer_error("Memory allocation failed");
-		return ;
-	}
+	if (!usb)
+		return (freeser(spliter, argv, coders, NULL));
+	table = gen_table(coders);
+	if (!table)
+		return (freeser(spliter, argv, coders, usb));
 	asign_usb(usb, coders);
-	// print_all_coders(coders);
+	// print_all_coders(table);
 	delet_usbs(usb);
-	delet_coders(coders);
+	delete_table(table);
+	return (NULL);
 }
 
 int	main(int argc, char **argv)
@@ -78,7 +88,7 @@ int	main(int argc, char **argv)
 		args = ft_split(argv[1], ' ');
 		if (!args)
 			return (printer_error("Memory allocation failed"));
-		arg = ft_memlen(args);
+		arg = ft_structurlen((const void **) args);
 		spliter = 1;
 	}
 	else if (argc == 9)
@@ -86,8 +96,8 @@ int	main(int argc, char **argv)
 		args = argv + 1;
 		arg = argc - 1;
 	}
-	execute_program(arg, args, spliter);
-	if (spliter)
-		free_split(args);
+	execute_program(arg, &args, spliter);
+	if (spliter && args)
+		free_split(&args);
 	return (0);
 }

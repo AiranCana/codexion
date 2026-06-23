@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/22 15:34:13 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/23 15:52:03 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef enum e_schedule
 typedef struct s_USB
 {
 	int				id;
+	long long		cooldown_start;
 }	t_USB;
 
 typedef struct s_data
@@ -59,6 +60,12 @@ typedef struct s_coder
 	t_state		state;
 	t_data		*data;
 }	t_coder;
+
+typedef struct s_table
+{
+	pthread_t	thread_id;
+	t_coder		**coders;
+}	t_table;
 
 int		printer_error(char *message);
 

@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 12:12:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/22 15:50:15 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/23 12:58:48 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,15 +133,17 @@ void	asign_usb(t_USB **usb, t_coder **coders)
 // 	printf("\n");
 // }
 
-// void	print_all_coders(t_coder **coders)
+// void	print_all_coders(t_table *table)
 // {
 // 	int	i;
+// 	t_coder	**coders;
 
-// 	if (!coders || !coders[0])
+// 	if (!table || !table -> coders || !table -> coders[0])
 // 	{
 // 		printf("Coders array is empty or NULL.\n");
 // 		return ;
 // 	}
+// 	coders = table -> coders;
 // 	printf("=========================================\n");
 // 	printf("                  DATA                   \n");
 // 	printf("=========================================\n");
