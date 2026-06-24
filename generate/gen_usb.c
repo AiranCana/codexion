@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 12:12:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/23 12:58:48 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/24 13:39:46 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static t_USB	*gen_usb(int num)
 	usb = ft_calloc(sizeof(t_USB), 1);
 	if (!usb)
 		return (NULL);
+	usb -> id = num;
+	usb -> fre = 1;
 	return (usb);
 }
 
@@ -80,8 +82,8 @@ void	asign_usb(t_USB **usb, t_coder **coders)
 // {
 // 	if (state == IDLE)
 // 		return ("IDLE");
-// 	if (state == FISNI)
-// 		return ("FISNI");
+// 	if (state == FINISH)
+// 		return ("FINISH");
 // 	if (state == COMPILING)
 // 		return ("COMPILING");
 // 	if (state == DEBUGGING)

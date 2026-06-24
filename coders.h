@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/23 15:52:03 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/24 15:30:25 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 typedef enum e_state
 {
 	IDLE,
-	FISNI,
+	FINISH,
 	COMPILING,
 	DEBUGGING,
 	REFACTORING,
@@ -36,6 +36,7 @@ typedef struct s_USB
 {
 	int				id;
 	long long		cooldown_start;
+	int				fre;
 }	t_USB;
 
 typedef struct s_data
@@ -55,6 +56,7 @@ typedef struct s_coder
 	t_USB		*right_usb;
 	t_USB		*left_usb;
 	long long	last_compile_start;
+	long long	first_compile_start;
 	int			compile_count;
 	int			coder_id;
 	t_state		state;
@@ -63,10 +65,15 @@ typedef struct s_coder
 
 typedef struct s_table
 {
-	pthread_t	thread_id;
-	t_coder		**coders;
+	pthread_t		thread_id;
+	pthread_mutex_t	mutex;
+	t_coder			**coders;
 }	t_table;
 
-int		printer_error(char *message);
+int			printer_error(char *message);
+long long	get_time(void);
+void		ft_sleep(long long time);
+int			verif_time(long long data_time);
+int			priority(t_coder *this_coder, t_table *table);
 
 #endif

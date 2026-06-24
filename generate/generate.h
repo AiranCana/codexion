@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 11:58:14 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/23 12:59:00 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/06/24 12:43:20 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ void	asign_usb(t_USB **usb, t_coder **coders);
 t_table	*gen_table(t_coder **coders);
 void	delete_table(t_table *table);
 
-// void	print_all_coders(t_coder **coders);
+// void	print_all_coders(t_table *table);
 
 #endif
