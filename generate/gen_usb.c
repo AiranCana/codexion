@@ -78,6 +78,20 @@ void	asign_usb(t_USB **usb, t_coder **coders)
 	}
 }
 
+int	takeusb(t_USB *usb, t_coder *coder, long long cooldown)
+{
+	if (usb -> fre)
+	{
+		usb -> fre = 0;
+		if (verif_bornout(usb -> cooldown_start + cooldown, coder))
+			return (1);
+		else
+			usb -> fre = 1;
+	}
+	return (0);
+}
+
+
 // static const char	*get_state_str(t_state state)
 // {
 // 	if (state == IDLE)

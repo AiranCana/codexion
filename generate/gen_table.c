@@ -14,14 +14,13 @@
 #include "../utils/utils.h"
 #include "generate.h"
 
-t_table	*gen_table(t_coder **coders)
+t_table	*gen_table(void)
 {
 	t_table	*table;
 
 	table = ft_calloc(sizeof(t_table), 1);
 	if (!table)
 		return (NULL);
-	table -> coders = coders;
 	return (table);
 }
 

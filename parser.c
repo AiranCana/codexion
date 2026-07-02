@@ -96,7 +96,7 @@ static t_data	*gen_data(int argc, char **argv)
 	return (NULL);
 }
 
-t_coder	**init_coders(int argc, char **argv)
+t_coder	**init_coders(int argc, char **argv, t_table **table)
 {
 	t_data	*data;
 	t_coder	**coders;
@@ -115,7 +115,7 @@ t_coder	**init_coders(int argc, char **argv)
 		return (NULL);
 	while (i < num_coders)
 	{
-		coders[i] = gen_coder(i + 1, data);
+		coders[i] = gen_coder(i + 1, data, *table);
 		if (!coders[i])
 			return (delet_coders(coders));
 		i++;

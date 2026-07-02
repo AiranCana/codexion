@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <coders.h>
+#include "coders.h"
 
 static int	prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder)
 {
@@ -44,8 +44,8 @@ int	priority(t_coder *this_coder, t_table *table)
 	i = 0;
 	while (table -> coders[i])
 	{
-		coder = table -> coder[i];
-		if (other->coder_id != this_coder->coder_id && other->state == IDLE)
+		coder = table -> coders[i];
+		if (coder->coder_id != this_coder->coder_id && coder->state == IDLE)
 		{
 			if (!prube_scheduler(data, this_coder, coder))
 				return (0);

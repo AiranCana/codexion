@@ -15,6 +15,9 @@
 
 # include <pthread.h>
 # include <unistd.h>
+# include <stdio.h>
+
+typedef struct s_table t_table;
 
 typedef enum e_state
 {
@@ -59,6 +62,7 @@ typedef struct s_coder
 	long long	first_compile_start;
 	int			compile_count;
 	int			coder_id;
+	t_table		*table;
 	t_state		state;
 	t_data		*data;
 }	t_coder;
@@ -75,5 +79,6 @@ long long	get_time(void);
 void		ft_sleep(long long time);
 int			verif_time(long long data_time);
 int			priority(t_coder *this_coder, t_table *table);
+void		ruotine(void *arg);
 
 #endif

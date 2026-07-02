@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-t_coder	*gen_coder(int coder_id, t_data *data)
+t_coder	*gen_coder(int coder_id, t_data *data, t_table *table)
 {
 	t_coder	*coder;
 
@@ -23,6 +23,7 @@ t_coder	*gen_coder(int coder_id, t_data *data)
 	if (!coder)
 		return (NULL);
 	coder -> data = data;
+	coder -> table = table;
 	coder -> state = IDLE;
 	coder -> coder_id = coder_id;
 	coder -> last_compile_start = 0;

@@ -39,14 +39,12 @@ int	printer_error(char *message)
 	return (0);
 }
 
-void	*freeser(int split, char ***argv, t_coder **cod, t_USB **us)
+void	*freeser(int split, char ***argv, t_table *table)
 {
 	if (split && argv)
 		free_split(argv);
-	if (cod)
-		delet_coders(cod);
-	if (us)
-		delet_usbs(us);
+	if (table)
+		delete_table(table);
 	printer_error("Memory allocation failed");
 	return (NULL);
 }
@@ -57,15 +55,16 @@ void	*execute_program(int argc, char ***argv, int spliter)
 	t_USB	**usb;
 	t_table	*table;
 
-	coders = init_coders(argc, *argv);
+	table = gen_table();
+	if (!table)
+		return (freeser(spliter, argv, NULL));
+	coders = init_coders(argc, *argv, &table);
 	if (!coders)
-		return (freeser(spliter, argv, NULL, NULL));
+		return (freeser(spliter, argv, table));
+	table -> coders = coders;
 	usb = gen_usbs(ft_structurlen((const void **)coders));
 	if (!usb)
-		return (freeser(spliter, argv, coders, NULL));
-	table = gen_table(coders);
-	if (!table)
-		return (freeser(spliter, argv, coders, usb));
+		return (freeser(spliter, argv, table));
 	asign_usb(usb, coders);
 	// print_all_coders(table);
 	delet_usbs(usb);

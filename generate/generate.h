@@ -16,14 +16,15 @@
 # include "../coders.h"
 
 void	*delet_coders(t_coder **coder);
-t_coder	*gen_coder(int coder_id, t_data *data);
-t_coder	**init_coders(int argc, char **argv);
+t_coder	*gen_coder(int coder_id, t_data *data, t_table *table);
+t_coder	**init_coders(int argc, char **argv, t_table **table);
 t_data	*init_data(int argc, char **args);
 t_USB	**gen_usbs(size_t num);
 void	*delet_usbs(t_USB **usb);
 void	asign_usb(t_USB **usb, t_coder **coders);
-t_table	*gen_table(t_coder **coders);
+t_table	*gen_table(void);
 void	delete_table(t_table *table);
+int	    takeusb(t_USB *usb, t_coder *coder, long long cooldown);
 
 // void	print_all_coders(t_table *table);
 
