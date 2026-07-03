@@ -12,8 +12,9 @@
 
 #include "coders.h"
 #include "generate/generate.h"
+#include <errno.h>
 
-static int	verif_bornout(long long born, t_coder *coder)
+int	verif_bornout(long long born, t_coder *coder)
 {
 	if (!verif_time(born + coder -> data -> time_to_burnout))
 		return (1);
@@ -21,7 +22,7 @@ static int	verif_bornout(long long born, t_coder *coder)
 	return (0);
 }
 
-static void	print_coder(t_coder *coder)
+void	print_coder(t_coder *coder)
 {
 	long long	time;
 	char		*leter;
@@ -52,12 +53,14 @@ static void	operate_pthread(t_coder *coder, long long *born)
 	*born = get_time();
 	print_coder(coder);
 	ft_sleep(coder -> data -> time_to_compile);
-	pthread_mutex_lock(&coder -> table -> mutex);
+	pthread_mutex_lock(&coder -> right_usb -> mutex);
 	coder -> right_usb -> cooldown_start = get_time();
 	coder -> right_usb -> fre = 1;
+	pthread_mutex_unlock(&coder -> right_usb -> mutex);
+	pthread_mutex_lock(&coder -> left_usb -> mutex);
 	coder -> left_usb -> cooldown_start = get_time();
 	coder -> left_usb -> fre = 1;
-	pthread_mutex_unlock(&coder -> table -> mutex);
+	pthread_mutex_unlock(&coder -> left_usb -> mutex);
 	coder -> compile_count++;
 	coder -> last_compile_start = get_time();
 	coder -> state = DEBUGGING;
@@ -74,16 +77,31 @@ static void	operate_pthread(t_coder *coder, long long *born)
 
 static int	verif_usb_and_bornout(long long born, t_coder *coder)
 {
+	long long		time;
+	struct timespec	ts;
+	int				ret;
+
+	time = born + coder -> data -> dongle_cooldown;
+	ts.tv_sec = time / 1000;
+	ts.tv_nsec = (time % 1000) * 1000;
 	pthread_mutex_lock(&coder -> table -> mutex);
-	if (takeusb(coder -> left_usb, coder, coder -> data -> dongle_cooldown)
-		&& verif_bornout(born, coder)
-	)
+	while (!coder -> left_usb -> fre || !coder -> right_usb -> fre
+		|| !priority(coder, coder -> table))
 	{
-		pthread_mutex_unlock(&coder -> table -> mutex);
-		return (1);
+		ret = pthread_cond_timedwait(
+			&coder -> table -> cond,
+			&coder -> table -> mutex, &ts);
+		if (ret == ETIMEDOUT)
+		{
+			coder -> state = BURNED_OUT;
+			pthread_mutex_unlock(&coder -> table -> mutex);
+			return (0);
+		}
 	}
+	takeusb(coder);
+	coder -> state = COMPILING;
 	pthread_mutex_unlock(&coder -> table -> mutex);
-	return (0);
+	return (1);
 }
 
 void	ruotine(void *arg)
@@ -97,18 +115,8 @@ void	ruotine(void *arg)
 	coder -> last_compile_start = born;
 	while (coder -> state != FINISH && coder -> state != BURNED_OUT)
 	{
-		if (takeusb(coder -> left_usb, coder, coder -> data -> dongle_cooldown)
-			&& verif_bornout(born, coder)
-		)
-		{
-			if (takeusb(coder -> right_usb, coder, coder -> data -> dongle_cooldown))
-			{
-				operate_pthread(coder, &born);
-			}
-			else
-				coder -> left_usb -> fre = 1;
-		}
-		
+		if (verif_usb_and_bornout(born, coder))
+			operate_pthread(coder, &born);
 	}
 	print_coder(coder);
 }

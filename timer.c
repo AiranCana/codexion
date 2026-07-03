@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/time.h>
 #include <unistd.h>
+#include "coders.h"
 
 long long	get_time(void)
 {

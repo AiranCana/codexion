@@ -21,10 +21,10 @@ t_coder	**init_coders(int argc, char **argv, t_table **table);
 t_data	*init_data(int argc, char **args);
 t_USB	**gen_usbs(size_t num);
 void	*delet_usbs(t_USB **usb);
-void	asign_usb(t_USB **usb, t_coder **coders);
 t_table	*gen_table(void);
 void	delete_table(t_table *table);
-int	    takeusb(t_USB *usb, t_coder *coder, long long cooldown);
+void	takeusb(t_coder *coder);
+void	dropusb(t_coder *coder);
 
 // void	print_all_coders(t_table *table);
 

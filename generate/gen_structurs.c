@@ -19,7 +19,7 @@ t_coder	*gen_coder(int coder_id, t_data *data, t_table *table)
 {
 	t_coder	*coder;
 
-	coder = malloc(sizeof (t_coder));
+	coder = ft_calloc(sizeof (t_coder), 1);
 	if (!coder)
 		return (NULL);
 	coder -> data = data;
@@ -66,7 +66,7 @@ t_data	*init_data(int argc, char **args)
 
 	if (argc != 8)
 		return (NULL);
-	data = malloc(sizeof (t_data));
+	data = ft_calloc(sizeof (t_data), 1);
 	if (!data)
 		return (NULL);
 	data->time_to_burnout = ft_atol(args[1]);
