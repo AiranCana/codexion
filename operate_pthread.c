@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/24 16:02:57 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/06 13:07:06 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,19 @@ static void	operate_pthread(t_coder *coder, long long *born)
 	coder -> state = COMPILING;
 	*born = get_time();
 	print_coder(coder);
-	ft_sleep(coder -> data -> time_to_compile);
-	pthread_mutex_lock(&coder -> right_usb -> mutex);
-	coder -> right_usb -> cooldown_start = get_time();
-	coder -> right_usb -> fre = 1;
-	pthread_mutex_unlock(&coder -> right_usb -> mutex);
-	pthread_mutex_lock(&coder -> left_usb -> mutex);
-	coder -> left_usb -> cooldown_start = get_time();
-	coder -> left_usb -> fre = 1;
-	pthread_mutex_unlock(&coder -> left_usb -> mutex);
+	if (!ft_sleep(coder -> data -> time_to_compile, &coder))
+		return ;
+	dropusb(&coder)
 	coder -> compile_count++;
 	coder -> last_compile_start = get_time();
 	coder -> state = DEBUGGING;
 	print_coder(coder);
-	ft_sleep(coder -> data -> time_to_debug);
+	if (!ft_sleep(coder -> data -> time_to_debug, &coder))
+		return ;
 	coder -> state = REFACTORING;
 	print_coder(coder);
-	ft_sleep(coder -> data -> time_to_refactor);
+	if (!ft_sleep(coder -> data -> time_to_refactor, &coder))
+		return ;
 	if (coder -> compile_count == coder -> data -> number_of_compiles_required)
 		coder -> state = FINISH;
 	else
@@ -83,14 +79,14 @@ static int	verif_usb_and_bornout(long long born, t_coder *coder)
 
 	time = born + coder -> data -> dongle_cooldown;
 	ts.tv_sec = time / 1000;
-	ts.tv_nsec = (time % 1000) * 1000;
+	ts.tv_nsec = (time % 1000) * 1000000;
 	pthread_mutex_lock(&coder -> table -> mutex);
 	while (!coder -> left_usb -> fre || !coder -> right_usb -> fre
 		|| !priority(coder, coder -> table))
 	{
 		ret = pthread_cond_timedwait(
-			&coder -> table -> cond,
-			&coder -> table -> mutex, &ts);
+				&coder -> table -> cond,
+				&coder -> table -> mutex, &ts);
 		if (ret == ETIMEDOUT)
 		{
 			coder -> state = BURNED_OUT;

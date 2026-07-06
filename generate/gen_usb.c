@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 12:12:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/24 13:39:46 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/06 12:57:05 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ static t_USB	*gen_usb(int num)
 	usb = ft_calloc(sizeof(t_USB), 1);
 	if (!usb)
 		return (NULL);
+	if (pthread_mutex_init(&usb -> mutex, NULL) != 0)
+	{
+		free(usb);
+		return (NULL);
+	}
 	usb -> id = num;
 	usb -> fre = 1;
 	return (usb);
@@ -35,9 +40,12 @@ void	*delet_usbs(t_USB **usb)
 	i = 0;
 	while (usb[i])
 	{
-		pthread_mutex_destroy(&usb[i]-> mutex);
-		free(usb[i]);
-		usb[i] = NULL;
+		if (usb[i])
+		{
+			pthread_mutex_destroy(&usb[i]-> mutex);
+			free(usb[i]);
+			usb[i] = NULL;
+		}
 		i++;
 	}
 	free(usb);

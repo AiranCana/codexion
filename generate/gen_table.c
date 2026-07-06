@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 10:52:46 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/23 12:12:00 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/06 12:54:49 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,19 @@ t_table	*gen_table(void)
 		free(table);
 		return (NULL);
 	}
+	if (pthread_cond_init(&table -> cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&table -> mutex);
+		free(table);
+		return (NULL);
+	}
 	return (table);
 }
 
 void	delete_table(t_table *table)
 {
 	delet_coders(table -> coders);
+	pthread_cond_destroy(&table -> cond);
 	pthread_mutex_destroy(&table -> mutex);
 	free(table);
 	table = NULL;
