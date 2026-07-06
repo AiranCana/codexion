@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 13:10:49 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/24 13:11:36 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/06 15:43:52 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,41 @@ int	priority(t_coder *this_coder, t_table *table)
 		{
 			if (!prube_scheduler(data, this_coder, coder))
 				return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+void	wait_codex(t_table *table, int i)
+{
+	int	j;
+
+	j = 0;
+	while (j < i)
+	{
+		pthread_join(table->coders[j]->thread_id, NULL);
+		j++;
+	}
+}
+
+int	start_routin(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (table -> coders[i])
+	{
+		if (pthread_create(&table -> coders[i]-> thread_id, NULL,
+				&ruotine, table ->coders[i]) != 0)
+		{
+			printer_error("fallo en la creacion del hilo");
+			pthread_mutex_lock(&table -> mutex);
+			table -> failed = 1;
+			pthread_cond_broadcast(&table -> cond);
+			pthread_mutex_unlock(&table -> mutex);
+			wait_codex(table, i);
+			return (0);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 13:07:06 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/06 15:42:52 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	operate_pthread(t_coder *coder, long long *born)
 	print_coder(coder);
 	if (!ft_sleep(coder -> data -> time_to_compile, &coder))
 		return ;
-	dropusb(&coder)
+	dropusb(&coder);
 	coder -> compile_count++;
 	coder -> last_compile_start = get_time();
 	coder -> state = DEBUGGING;
@@ -81,7 +81,7 @@ static int	verif_usb_and_bornout(long long born, t_coder *coder)
 	ts.tv_sec = time / 1000;
 	ts.tv_nsec = (time % 1000) * 1000000;
 	pthread_mutex_lock(&coder -> table -> mutex);
-	while (!coder -> left_usb -> fre || !coder -> right_usb -> fre
+	while (available_usbs(coder)
 		|| !priority(coder, coder -> table))
 	{
 		ret = pthread_cond_timedwait(
@@ -94,13 +94,13 @@ static int	verif_usb_and_bornout(long long born, t_coder *coder)
 			return (0);
 		}
 	}
-	takeusb(coder);
+	takeusb(&coder);
 	coder -> state = COMPILING;
 	pthread_mutex_unlock(&coder -> table -> mutex);
 	return (1);
 }
 
-void	ruotine(void *arg)
+void	*ruotine(void *arg)
 {
 	t_coder		*coder;
 	long long	born;
@@ -111,8 +111,16 @@ void	ruotine(void *arg)
 	coder -> last_compile_start = born;
 	while (coder -> state != FINISH && coder -> state != BURNED_OUT)
 	{
+		pthread_mutex_lock(&coder -> table -> mutex);
+		if (coder -> table -> failed)
+		{
+			pthread_mutex_unlock(&coder -> table -> mutex);
+			return (NULL);
+		}
+		pthread_mutex_unlock(&coder -> table -> mutex);
 		if (verif_usb_and_bornout(born, coder))
 			operate_pthread(coder, &born);
 	}
 	print_coder(coder);
+	return (NULL);
 }

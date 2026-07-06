@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 13:19:24 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 13:12:54 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/06 15:48:48 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,25 @@ void	asign_usb(t_USB **usb, t_coder **coders)
 
 void	takeusb(t_coder **coder)
 {
-	pthread_mutex_lock(coder -> right_usb -> mutex);
-	coder -> right_usb -> fre = 0;
+	pthread_mutex_lock(&(*coder)-> right_usb -> mutex);
+	(*coder)-> right_usb -> fre = 0;
 	print_coder(*coder);
-	pthread_mutex_unlock(coder -> right_usb -> mutex);
-	pthread_mutex_lock(coder -> left_usb -> mutex);
-	coder -> left_usb -> fre = 0;
+	pthread_mutex_unlock(&(*coder)-> right_usb -> mutex);
+	pthread_mutex_lock(&(*coder)-> left_usb -> mutex);
+	(*coder)-> left_usb -> fre = 0;
 	print_coder(*coder);
-	pthread_mutex_unlock(coder -> left_usb -> mutex);
+	pthread_mutex_unlock(&(*coder)-> left_usb -> mutex);
 }
 
 void	dropusb(t_coder **coder)
 {
-	pthread_mutex_lock(coder -> table -> mutex);
-	*coder -> right_usb -> cooldown_start = get_time();
-	coder -> left_usb -> fre = 1;
-	coder -> left_usb -> cooldown_start = get_time();
-	coder -> right_usb -> fre = 1;
-	pthread_cond_broadcast(coder -> table -> cond);
-	pthread_mutex_unlock(coder -> table -> mutex);
+	pthread_mutex_lock(&(*coder)-> table -> mutex);
+	(*coder)-> right_usb -> cooldown_start = get_time();
+	(*coder)-> left_usb -> fre = 1;
+	(*coder)-> left_usb -> cooldown_start = get_time();
+	(*coder)-> right_usb -> fre = 1;
+	pthread_cond_broadcast(&(*coder)-> table -> cond);
+	pthread_mutex_unlock(&(*coder)-> table -> mutex);
 }
 
 int	available_usbs(t_coder *coder)
