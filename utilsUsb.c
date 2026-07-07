@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 13:19:24 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 15:48:48 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/07 15:15:47 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,23 @@ int	available_usbs(t_coder *coder)
 	long long	now;
 
 	now = get_time();
-	if (!coder -> left_usb -> fre
-		|| now - coder -> left_usb -> cooldown_start
-		< coder -> data -> dongle_cooldown)
-		return (0);
-	if (!coder -> right_usb -> fre
-		|| now - coder -> right_usb -> cooldown_start
-		< coder -> data -> dongle_cooldown)
-		return (0);
+	if (coder -> coder_id % 2)
+	{
+		if (!coder -> left_usb -> fre || now - coder
+			-> left_usb -> cooldown_start < coder -> data -> dongle_cooldown)
+			return (0);
+		if (!coder -> right_usb -> fre || now - coder
+			-> right_usb -> cooldown_start < coder -> data -> dongle_cooldown)
+			return (0);
+	}
+	else
+	{
+		if (!coder -> right_usb -> fre || now - coder
+			-> right_usb -> cooldown_start < coder -> data -> dongle_cooldown)
+			return (0);
+		if (!coder -> left_usb -> fre || now - coder
+			-> left_usb -> cooldown_start < coder -> data -> dongle_cooldown)
+			return (0);
+	}
 	return (1);
 }

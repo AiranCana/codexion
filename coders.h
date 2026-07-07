@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 15:43:30 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/07 13:14:10 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ int			ft_sleep(long long time, t_coder **coder);
 int			verif_time(long long data_time);
 int			priority(t_coder *this_coder, t_table *table);
 void		*ruotine(void *arg);
-int			verif_bornout(long long born, t_coder *coder);
 void		print_coder(t_coder *coder);
 void		asign_usb(t_USB **usb, t_coder **coders);
 int			available_usbs(t_coder *coder);

@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 10:51:03 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 15:57:28 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/07 10:52:24 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	*execute_program(int argc, char ***argv, int spliter)
 	if (!usb)
 		return (freeser(spliter, argv, table));
 	asign_usb(usb, coders);
+	print_all_coders(table);
 	start_routin(table);
 	delet_usbs(usb);
 	delete_table(table);

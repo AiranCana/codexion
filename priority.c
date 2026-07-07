@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 13:10:49 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 15:43:52 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/07 13:12:38 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ int	start_routin(t_table *table)
 		}
 		i++;
 	}
+	wait_codex(table, i);
 	return (1);
 }

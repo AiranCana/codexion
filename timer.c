@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 15:52:40 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 15:45:26 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/07 13:57:33 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,18 @@ long long	get_time(void)
 
 int	ft_sleep(long long time, t_coder **coder)
 {
-	usleep(time);
+	long long	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+	{
+		if (((*coder)-> state != BURNED_OUT
+				&& !verif_time((*coder)-> first_compile_start
+					+ (*coder)-> data -> time_to_burnout)))
+			return (0);
+		usleep(1000);
+	}
+	// usleep(1000 * time);
 	return (1);
 }
 

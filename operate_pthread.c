@@ -6,21 +6,13 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 15:42:52 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/07 13:54:07 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 #include "generate/generate.h"
 #include <errno.h>
-
-int	verif_bornout(long long born, t_coder *coder)
-{
-	if (!verif_time(born + coder -> data -> time_to_burnout))
-		return (1);
-	coder -> state = BURNED_OUT;
-	return (0);
-}
 
 void	print_coder(t_coder *coder)
 {
@@ -30,15 +22,15 @@ void	print_coder(t_coder *coder)
 	leter = NULL;
 	time = get_time();
 	if (coder -> state == IDLE)
-		leter = " has taken a dongle\n";
+		leter = "has taken a dongle\n";
 	else if (coder -> state == COMPILING)
-		leter = " is compiling\n";
+		leter = "is compiling\n";
 	else if (coder -> state == DEBUGGING)
-		leter = " is debugging\n";
+		leter = "is debugging\n";
 	else if (coder -> state == REFACTORING)
-		leter = " is refactoring\n";
+		leter = "is refactoring\n";
 	else if (coder -> state == BURNED_OUT)
-		leter = " has burned out\n";
+		leter = "has burned out\n";
 	if (leter)
 		printf(
 			"%lli %i %s",
@@ -50,10 +42,14 @@ void	print_coder(t_coder *coder)
 static void	operate_pthread(t_coder *coder, long long *born)
 {
 	coder -> state = COMPILING;
-	*born = get_time();
 	print_coder(coder);
+	*born = get_time();
+	coder -> last_compile_start = *born;
 	if (!ft_sleep(coder -> data -> time_to_compile, &coder))
+	{
+		dropusb(&coder);
 		return ;
+	}
 	dropusb(&coder);
 	coder -> compile_count++;
 	coder -> last_compile_start = get_time();
@@ -71,31 +67,26 @@ static void	operate_pthread(t_coder *coder, long long *born)
 		coder -> state = IDLE;
 }
 
-static int	verif_usb_and_bornout(long long born, t_coder *coder)
+static int	verif_usb_and_bornout(long long *born, t_coder *coder)
 {
 	long long		time;
-	struct timespec	ts;
 	int				ret;
 
-	time = born + coder -> data -> dongle_cooldown;
-	ts.tv_sec = time / 1000;
-	ts.tv_nsec = (time % 1000) * 1000000;
+	time = *born + coder -> data -> time_to_burnout;
 	pthread_mutex_lock(&coder -> table -> mutex);
-	while (available_usbs(coder)
-		|| !priority(coder, coder -> table))
+	while (!available_usbs(coder) || !priority(coder, coder -> table))
 	{
-		ret = pthread_cond_timedwait(
-				&coder -> table -> cond,
-				&coder -> table -> mutex, &ts);
-		if (ret == ETIMEDOUT)
+		if (verif_time(time))
 		{
 			coder -> state = BURNED_OUT;
+			coder -> table -> failed = 1;
 			pthread_mutex_unlock(&coder -> table -> mutex);
 			return (0);
 		}
 	}
 	takeusb(&coder);
 	coder -> state = COMPILING;
+	*born = get_time();
 	pthread_mutex_unlock(&coder -> table -> mutex);
 	return (1);
 }
@@ -109,18 +100,20 @@ void	*ruotine(void *arg)
 	born = get_time();
 	coder -> first_compile_start = get_time();
 	coder -> last_compile_start = born;
-	while (coder -> state != FINISH && coder -> state != BURNED_OUT)
+	while ((coder -> state != FINISH && coder -> state != BURNED_OUT))
 	{
 		pthread_mutex_lock(&coder -> table -> mutex);
 		if (coder -> table -> failed)
 		{
 			pthread_mutex_unlock(&coder -> table -> mutex);
+			print_coder(coder);
 			return (NULL);
 		}
 		pthread_mutex_unlock(&coder -> table -> mutex);
-		if (verif_usb_and_bornout(born, coder))
+		if (verif_usb_and_bornout(&born, coder))
 			operate_pthread(coder, &born);
 	}
-	print_coder(coder);
+	if (coder -> state == BURNED_OUT)
+		print_coder(coder);
 	return (NULL);
 }
