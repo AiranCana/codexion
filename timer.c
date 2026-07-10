@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 15:52:40 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 13:55:39 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/10 16:03:37 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_sleep(long long time, t_coder **coder)
 	long long	start;
 
 	start = get_time();
-	while ((get_time() - start) <= time)
+	while ((get_time() - start) < time)
 	{
 		if ((*coder)-> table -> failed || (((*coder)-> state == BURNED_OUT
 					&& verif_time((*coder)-> first_compile_start
