@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 10:32:54 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/23 12:29:39 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/10 14:27:25 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	alpha_verif(char *arg)
 
 static int	numeric_verif(char *arg)
 {
-	int	i;
+	long long	i;
 
 	i = 0;
 	if (arg[i] == '\0')
@@ -51,6 +51,8 @@ static int	numeric_verif(char *arg)
 			return (0);
 		i++;
 	}
+	if (ft_atol(arg) > 2147483647)
+		return (0);
 	return (1);
 }
 
@@ -78,7 +80,6 @@ static int	valid_data(int argc, char **argv)
 		printer_error("Invalid argument: not a valid scheduler type");
 		return (0);
 	}
-	printf("argument valid\n");
 	return (1);
 }
 
@@ -109,10 +110,12 @@ t_coder	**init_coders(int argc, char **argv, t_table **table)
 	data = gen_data(argc, argv);
 	if (!data)
 		return (NULL);
+	if (data -> num_coders == 0)
+		return (delete_data(data));
 	num_coders = atoi(argv[0]);
 	coders = ft_calloc(sizeof(t_coder *), (num_coders + 1));
 	if (!coders)
-		return (NULL);
+		return (delete_data(data));
 	while (i < num_coders)
 	{
 		coders[i] = gen_coder(i + 1, data, *table);

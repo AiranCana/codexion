@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 13:19:24 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/07 15:15:47 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/10 12:40:11 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	takeusb(t_coder **coder)
 	(*coder)-> left_usb -> fre = 0;
 	print_coder(*coder);
 	pthread_mutex_unlock(&(*coder)-> left_usb -> mutex);
+	(*coder)-> state = COMPILING;
 }
 
 void	dropusb(t_coder **coder)

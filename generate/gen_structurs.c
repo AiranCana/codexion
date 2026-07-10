@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:26:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/22 15:39:58 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/10 12:58:40 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ t_data	*init_data(int argc, char **args)
 	data = ft_calloc(sizeof (t_data), 1);
 	if (!data)
 		return (NULL);
+	data->num_coders = ft_atoi(args[0]);
 	data->time_to_burnout = ft_atol(args[1]);
 	data->time_to_compile = ft_atol(args[2]);
 	data->time_to_debug = ft_atol(args[3]);

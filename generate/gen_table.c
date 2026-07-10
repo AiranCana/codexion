@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 10:52:46 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/06 15:55:57 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/10 13:00:34 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,10 @@ void	delete_table(t_table *table)
 	pthread_mutex_destroy(&table -> mutex);
 	free(table);
 	table = NULL;
+}
+
+void	*delete_data(t_data *data)
+{
+	free(data);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 13:10:49 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/07 13:12:38 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/10 14:14:22 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,21 +72,24 @@ int	start_routin(t_table *table)
 	int	i;
 
 	i = 0;
+	if (pthread_create(&table -> thread_id, NULL, &rutine_table, table) != 0)
+		return (printer_error("in the creation of monitor"));
 	while (table -> coders[i])
 	{
 		if (pthread_create(&table -> coders[i]-> thread_id, NULL,
 				&ruotine, table ->coders[i]) != 0)
 		{
-			printer_error("fallo en la creacion del hilo");
 			pthread_mutex_lock(&table -> mutex);
 			table -> failed = 1;
 			pthread_cond_broadcast(&table -> cond);
 			pthread_mutex_unlock(&table -> mutex);
 			wait_codex(table, i);
-			return (0);
+			pthread_join(table->thread_id, NULL);
+			return (printer_error("in the creation of pthread"));
 		}
 		i++;
 	}
 	wait_codex(table, i);
+	pthread_join(table->thread_id, NULL);
 	return (1);
 }

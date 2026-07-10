@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/07 13:54:07 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/10 14:45:54 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	print_coder(t_coder *coder)
 
 static void	operate_pthread(t_coder *coder, long long *born)
 {
-	coder -> state = COMPILING;
 	print_coder(coder);
 	*born = get_time();
 	coder -> last_compile_start = *born;
@@ -70,22 +69,27 @@ static void	operate_pthread(t_coder *coder, long long *born)
 static int	verif_usb_and_bornout(long long *born, t_coder *coder)
 {
 	long long		time;
-	int				ret;
 
 	time = *born + coder -> data -> time_to_burnout;
 	pthread_mutex_lock(&coder -> table -> mutex);
-	while (!available_usbs(coder) || !priority(coder, coder -> table))
+	while ((!available_usbs(coder) || !priority(coder, coder -> table))
+		&& !coder -> table -> failed)
 	{
 		if (verif_time(time))
 		{
 			coder -> state = BURNED_OUT;
-			coder -> table -> failed = 1;
+			pthread_cond_broadcast(&coder -> table -> cond);
 			pthread_mutex_unlock(&coder -> table -> mutex);
 			return (0);
 		}
+		wait_time(coder);
+	}
+	if (coder -> table -> failed)
+	{
+		pthread_mutex_unlock(&coder -> table -> mutex);
+		return (0);
 	}
 	takeusb(&coder);
-	coder -> state = COMPILING;
 	*born = get_time();
 	pthread_mutex_unlock(&coder -> table -> mutex);
 	return (1);
@@ -106,7 +110,6 @@ void	*ruotine(void *arg)
 		if (coder -> table -> failed)
 		{
 			pthread_mutex_unlock(&coder -> table -> mutex);
-			print_coder(coder);
 			return (NULL);
 		}
 		pthread_mutex_unlock(&coder -> table -> mutex);
@@ -115,5 +118,39 @@ void	*ruotine(void *arg)
 	}
 	if (coder -> state == BURNED_OUT)
 		print_coder(coder);
+	return (NULL);
+}
+
+void	*rutine_table(void *arg)
+{
+	t_table	*table;
+	int		i;
+	int		found;
+
+	found = 0;
+	table = (t_table *)arg;
+	while (!found)
+	{
+		pthread_mutex_lock(&table -> mutex);
+		if (table -> failed)
+			found = 1;
+		else
+		{
+			i = 0;
+			while (table->coders[i] && table->coders[i]->state != BURNED_OUT)
+				i++;
+			if (table -> coders[i])
+			{
+				table -> failed = 1;
+				pthread_cond_broadcast(&table -> cond);
+				found = 1;
+			}
+		}
+		if (all_coders_finish(table))
+			return (NULL);
+		pthread_mutex_unlock(&table -> mutex);
+		if (!found)
+			usleep(500);
+	}
 	return (NULL);
 }
