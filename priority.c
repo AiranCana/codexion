@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 13:10:49 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 14:14:22 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/13 11:29:40 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,24 @@ void	wait_codex(t_table *table, int i)
 	}
 }
 
+static void	start_time(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (table -> coders[i])
+	{
+		table -> coders[i]-> last_compile_start = get_time();
+		i++;
+	}
+}
+
 int	start_routin(t_table *table)
 {
 	int	i;
 
 	i = 0;
+	start_time(table);
 	if (pthread_create(&table -> thread_id, NULL, &rutine_table, table) != 0)
 		return (printer_error("in the creation of monitor"));
 	while (table -> coders[i])

@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 12:12:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 14:47:54 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/13 10:41:34 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,87 +71,3 @@ t_USB	**gen_usbs(size_t num)
 	}
 	return (usb);
 }
-
-// static const char	*get_state_str(t_state state)
-// {
-// 	if (state == IDLE)
-// 		return ("IDLE");
-// 	if (state == FINISH)
-// 		return ("FINISH");
-// 	if (state == COMPILING)
-// 		return ("COMPILING");
-// 	if (state == DEBUGGING)
-// 		return ("DEBUGGING");
-// 	if (state == REFACTORING)
-// 		return ("REFACTORING");
-// 	return ("BURNED_OUT");
-// }
-
-// static void	print_data(t_data *data)
-// {
-// 	if (!data)
-// 	{
-// 		printf("Data: NULL\n");
-// 		return ;
-// 	}
-// 	printf("=========================================\n");
-// 	printf("           GLOBAL CONFIGURATION          \n");
-// 	printf("=========================================\n");
-// 	printf("Time to Burnout:    %lld ms\n", data->time_to_burnout);
-// 	printf("Time to Compile:    %lld ms\n", data->time_to_compile);
-// 	printf("Time to Debug:      %lld ms\n", data->time_to_debug);
-// 	printf("Time to Refactor:   %lld ms\n", data->time_to_refactor);
-// 	printf("Compiles Required:  %d\n", data->number_of_compiles_required);
-// 	printf("Dongle Cooldown:    %lld ms\n", data->dongle_cooldown);
-// 	printf("Scheduler Type:     %s\n", data->scheduler == FIFO ? "FIFO" : "EDF");
-// 	printf("=========================================\n\n");
-// }
-
-// static void	print_coders(t_coder *coder)
-// {
-// 	if (!coder)
-// 		return ;
-// 	printf("--- Coder ID: %d ---\n", coder->coder_id);
-// 	printf("  Thread ID:    %lu\n", (unsigned long)coder->thread_id);
-// 	printf("  State:        %s\n", get_state_str(coder->state));
-// 	printf("  Compiles:     %d/%d\n", coder->compile_count, coder->data ? coder->data->number_of_compiles_required : 0);
-// 	printf("  Last Compile: %lld ms\n", coder->last_compile_start);
-
-// 	if (coder->left_usb)
-// 		printf("  Left USB ID:  %d\n", coder->left_usb->id);
-// 	else
-// 		printf("  Left USB:     NONE\n");
-
-// 	if (coder->right_usb)
-// 		printf("  Right USB ID: %d\n", coder->right_usb->id);
-// 	else
-// 		printf("  Right USB:    NONE\n");
-// 	printf("\n");
-// }
-
-// void	print_all_coders(t_table *table)
-// {
-// 	int	i;
-// 	t_coder	**coders;
-
-// 	if (!table || !table -> coders || !table -> coders[0])
-// 	{
-// 		printf("Coders array is empty or NULL.\n");
-// 		return ;
-// 	}
-// 	coders = table -> coders;
-// 	printf("=========================================\n");
-// 	printf("                  DATA                   \n");
-// 	printf("=========================================\n");
-// 	print_data(coders[0]-> data);
-// 	printf("=========================================\n");
-// 	printf("             CODERS STATUS               \n");
-// 	printf("=========================================\n");
-// 	i = 0;
-// 	while (coders[i])
-// 	{
-// 		print_coders(coders[i]);
-// 		i++;
-// 	}
-// 	printf("=========================================\n");
-// }

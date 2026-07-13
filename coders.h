@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 14:34:16 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/13 10:56:05 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,6 @@ void		wait_codex(t_table *table, int i);
 int			start_routin(t_table *table);
 void		wait_time(t_coder *coder);
 int			all_coders_finish(t_table *table);
+int			found_dead(t_table *table);
 
 #endif

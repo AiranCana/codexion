@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 14:45:54 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/13 11:36:39 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static void	operate_pthread(t_coder *coder, long long *born)
 	}
 	dropusb(&coder);
 	coder -> compile_count++;
-	coder -> last_compile_start = get_time();
 	coder -> state = DEBUGGING;
 	print_coder(coder);
 	if (!ft_sleep(coder -> data -> time_to_debug, &coder))
@@ -135,19 +134,9 @@ void	*rutine_table(void *arg)
 		if (table -> failed)
 			found = 1;
 		else
-		{
-			i = 0;
-			while (table->coders[i] && table->coders[i]->state != BURNED_OUT)
-				i++;
-			if (table -> coders[i])
-			{
-				table -> failed = 1;
-				pthread_cond_broadcast(&table -> cond);
-				found = 1;
-			}
-		}
+			found = found_dead(table);
 		if (all_coders_finish(table))
-			return (NULL);
+			found = 1;
 		pthread_mutex_unlock(&table -> mutex);
 		if (!found)
 			usleep(500);
