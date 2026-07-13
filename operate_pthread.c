@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 11:36:39 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/13 16:16:07 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,10 @@ void	print_coder(t_coder *coder)
 		leter = "is refactoring\n";
 	else if (coder -> state == BURNED_OUT)
 		leter = "has burned out\n";
-	if (leter)
+	if (leter && verif_bornout(coder))
 		printf(
-			"%lli %i %s",
-			time - coder -> first_compile_start,
-			coder -> coder_id,
-			leter);
+			"%lli %i %s", time - coder -> first_compile_start,
+			coder -> coder_id, leter);
 }
 
 static void	operate_pthread(t_coder *coder, long long *born)
@@ -115,8 +113,11 @@ void	*ruotine(void *arg)
 		if (verif_usb_and_bornout(&born, coder))
 			operate_pthread(coder, &born);
 	}
-	if (coder -> state == BURNED_OUT)
+	if (coder -> state == BURNED_OUT && !coder -> bornout_log)
+	{
 		print_coder(coder);
+		coder -> bornout_log = 1;
+	}
 	return (NULL);
 }
 

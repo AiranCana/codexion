@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 10:56:05 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/13 16:12:48 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ typedef struct s_coder
 	pthread_t	thread_id;
 	t_USB		*right_usb;
 	t_USB		*left_usb;
-	long long	last_compile_start;
 	long long	first_compile_start;
+	long long	last_compile_start;
 	int			compile_count;
+	int			bornout_log;
 	int			coder_id;
 	t_table		*table;
 	t_state		state;
@@ -94,5 +95,6 @@ int			start_routin(t_table *table);
 void		wait_time(t_coder *coder);
 int			all_coders_finish(t_table *table);
 int			found_dead(t_table *table);
+int			verif_bornout(t_coder *coder);
 
 #endif

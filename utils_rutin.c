@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 14:32:54 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 11:48:29 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/13 16:17:01 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	found_dead(t_table *table)
 		{
 			table -> coders[i]-> state = BURNED_OUT;
 			print_coder(table -> coders[i]);
+			table -> coders[i]-> bornout_log = 1;
 			return (operations_dead(table));
 		}
 		else if (table -> coders[i]-> state == BURNED_OUT)
@@ -57,4 +58,22 @@ int	found_dead(t_table *table)
 		i++;
 	}
 	return (0);
+}
+
+int	verif_bornout(t_coder *coder)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	if (coder -> state == BURNED_OUT && !coder -> bornout_log)
+		return (1);
+	while (coder -> table -> coders[i])
+	{
+		if (coder -> table -> coders[i]-> state == BURNED_OUT)
+			count++;
+		i++;
+	}
+	return (!count);
 }
