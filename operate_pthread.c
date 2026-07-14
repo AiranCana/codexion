@@ -6,12 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:19:22 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 12:14:49 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder.h"
-
 
 void	print_coder(t_coder *coder)
 {
