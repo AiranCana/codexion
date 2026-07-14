@@ -6,13 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 10:52:46 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 13:00:34 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:02:59 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../coders.h"
-#include "../utils/utils.h"
-#include "generate.h"
+#include "coder.h"
 
 t_table	*gen_table(void)
 {

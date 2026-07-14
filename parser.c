@@ -6,16 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 10:32:54 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 13:55:16 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:38:44 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "coders.h"
-#include "utils/utils.h"
-#include "generate/generate.h"
+#include "coder.h"
 
 static int	alpha_verif(char *arg)
 {
@@ -51,7 +46,7 @@ static int	numeric_verif(char *arg)
 			return (0);
 		i++;
 	}
-	if (ft_atol(arg) > 2147483647 || ft_atol(arg) < 1)
+	if (ft_atol(arg) > 2147483648 || ft_atol(arg) < 1)
 		return (0);
 	return (1);
 }

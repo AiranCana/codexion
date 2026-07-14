@@ -6,14 +6,12 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:26:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 12:58:40 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:02:53 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../coders.h"
-#include "../utils/utils.h"
-#include <stdlib.h>
-#include <string.h>
+#include "coder.h"
+
 
 t_coder	*gen_coder(int coder_id, t_data *data, t_table *table)
 {

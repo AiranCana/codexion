@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 15:21:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 15:27:03 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/19 15:48:06 by acanadil          #+#    #+#             */
+/*   Updated: 2026/07/14 11:02:19 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "coders/utils.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	const char	*sol;
-	char		*dest;
-	size_t		count;
+	void	*allo;
 
-	count = 0;
-	sol = src;
-	dest = dst;
-	if (size <= 0)
-		return (ft_strlen(sol));
-	while (*src && (size - 1) > count++)
+	if (!nmemb || !size)
 	{
-		*dest = *src;
-		++dest;
-		++src;
+		return (malloc(0));
 	}
-	*dest = '\0';
-	return (ft_strlen(sol));
+	allo = malloc(nmemb * size);
+	if (!allo)
+		return (NULL);
+	ft_bzero(allo, size * nmemb);
+	return (allo);
 }

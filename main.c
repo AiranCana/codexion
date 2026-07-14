@@ -6,14 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 10:51:03 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 10:41:48 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:03:15 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coders.h"
-#include "utils/utils.h"
-#include "generate/generate.h"
-#include <stdio.h>
+#include "coder.h"
 
 void	free_split(char ***args)
 {

@@ -6,15 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 12:12:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 10:41:34 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:03:07 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../coders.h"
-#include "../utils/utils.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include "coder.h"
 
 static t_USB	*gen_usb(int num)
 {

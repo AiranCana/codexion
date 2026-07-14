@@ -6,12 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 15:52:40 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 16:03:37 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:03:43 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "coders.h"
+#include "coder.h"
 
 long long	get_time(void)
 {

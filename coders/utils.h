@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:06:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/22 13:27:32 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 10:46:41 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 
 # include <stdlib.h>
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_structurlen(const void **s);
 size_t	ft_strlen(const char *str);
-size_t	ft_memlen(const void *s);
 
 char	**ft_split(char const *s, char c);
 
@@ -27,7 +25,6 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strdup(const char *s);
 
 void	*ft_calloc(size_t nmemb, size_t size);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 void	ft_bzero(void *s, size_t n);
 long	ft_atol(const char *str);

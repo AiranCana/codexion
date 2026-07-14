@@ -2,9 +2,7 @@ FLAGS = -Wall -Werror -Wextra -pthread
 NAME = codexion
 
 
-SOURCE = $(wildcard *.c) \
-$(wildcard utils/*.c) \
-$(wildcard generate/*.c)
+SOURCE = $(wildcard *.c)
 
 OBJ = $(SOURCE:.c=.o)
 

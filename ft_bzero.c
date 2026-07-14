@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 12:56:26 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 16:02:33 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/14 11:56:52 by acanadil          #+#    #+#             */
+/*   Updated: 2026/07/14 11:02:15 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "coders/utils.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
-	size_t	count;
-	char	*des;
-	char	*sr;
+	size_t	pos;
+	char	*iter;
 
-	if (!dest && !src)
-		return (dest);
-	sr = (char *) src;
-	des = dest;
-	count = 0;
-	while (count != n)
+	iter = s;
+	pos = 0;
+	while ((pos++) != n)
 	{
-		des[count] = sr[count];
-		++count;
+		*iter = '\0';
+		++iter;
 	}
-	return (dest);
 }

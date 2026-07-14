@@ -6,11 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 13:10:49 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 11:29:40 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:03:31 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coders.h"
+#include "coder.h"
 
 static int	prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder)
 {

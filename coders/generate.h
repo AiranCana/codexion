@@ -6,14 +6,16 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 11:58:14 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 10:41:40 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 10:56:07 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GENERATE_H
 # define GENERATE_H
 
-# include "../coders.h"
+# include "coders.h"
+# include <stdlib.h>
+# include <string.h>
 
 void	*delet_coders(t_coder **coder);
 t_coder	*gen_coder(int coder_id, t_data *data, t_table *table);

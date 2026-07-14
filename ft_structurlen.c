@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_structurlen.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/19 15:48:08 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 15:26:45 by acanadil         ###   ########.fr       */
+/*   Created: 2026/06/22 13:26:25 by acanadil          #+#    #+#             */
+/*   Updated: 2026/07/14 11:02:40 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "coders/utils.h"
 
-char	*ft_strdup(const char *s)
+size_t	ft_structurlen(const void **s)
 {
-	void	*alloc;
-	char	*dest;
 	size_t	len;
 
-	len = ft_strlen(s) + 1;
-	alloc = malloc(sizeof (char) * len);
-	if (!alloc)
-		return (NULL);
-	dest = alloc;
-	while (*s)
-	{
-		*dest = *s;
-		++dest;
-		++s;
-	}
-	*dest = *s;
-	return (alloc);
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
 }

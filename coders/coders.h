@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 16:12:48 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:20:22 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <stdio.h>
+# include <errno.h>
+# include <unistd.h>
 
 typedef struct s_table	t_table;
 
@@ -81,6 +83,7 @@ typedef struct s_table
 }	t_table;
 
 int			printer_error(char *message);
+void		printer_coder(t_coder *coder);
 long long	get_time(void);
 int			ft_sleep(long long time, t_coder **coder);
 int			verif_time(long long data_time);

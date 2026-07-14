@@ -6,13 +6,12 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 16:16:07 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:19:22 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coders.h"
-#include "generate/generate.h"
-#include <errno.h>
+#include "coder.h"
+
 
 void	print_coder(t_coder *coder)
 {
@@ -39,7 +38,7 @@ void	print_coder(t_coder *coder)
 
 static void	operate_pthread(t_coder *coder, long long *born)
 {
-	print_coder(coder);
+	printer_coder(coder);
 	*born = get_time();
 	coder -> last_compile_start = *born;
 	if (!ft_sleep(coder -> data -> time_to_compile, &coder))
@@ -50,11 +49,11 @@ static void	operate_pthread(t_coder *coder, long long *born)
 	dropusb(&coder);
 	coder -> compile_count++;
 	coder -> state = DEBUGGING;
-	print_coder(coder);
+	printer_coder(coder);
 	if (!ft_sleep(coder -> data -> time_to_debug, &coder))
 		return ;
 	coder -> state = REFACTORING;
-	print_coder(coder);
+	printer_coder(coder);
 	if (!ft_sleep(coder -> data -> time_to_refactor, &coder))
 		return ;
 	if (coder -> compile_count == coder -> data -> number_of_compiles_required)
@@ -115,7 +114,7 @@ void	*ruotine(void *arg)
 	}
 	if (coder -> state == BURNED_OUT && !coder -> bornout_log)
 	{
-		print_coder(coder);
+		printer_coder(coder);
 		coder -> bornout_log = 1;
 	}
 	return (NULL);

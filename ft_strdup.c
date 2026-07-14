@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 11:56:52 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 16:02:06 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/19 15:48:08 by acanadil          #+#    #+#             */
+/*   Updated: 2026/07/14 11:02:29 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "coders/utils.h"
 
-void	ft_bzero(void *s, size_t n)
+char	*ft_strdup(const char *s)
 {
-	size_t	pos;
-	char	*iter;
+	void	*alloc;
+	char	*dest;
+	size_t	len;
 
-	iter = s;
-	pos = 0;
-	while ((pos++) != n)
+	len = ft_strlen(s) + 1;
+	alloc = malloc(sizeof (char) * len);
+	if (!alloc)
+		return (NULL);
+	dest = alloc;
+	while (*s)
 	{
-		*iter = '\0';
-		++iter;
+		*dest = *s;
+		++dest;
+		++s;
 	}
+	*dest = *s;
+	return (alloc);
 }

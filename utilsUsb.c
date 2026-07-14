@@ -6,13 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 13:19:24 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/10 15:59:32 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:03:52 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coders.h"
-#include "utils/utils.h"
-#include "generate/generate.h"
+#include "coder.h"
 
 void	asign_usb(t_USB **usb, t_coder **coders)
 {

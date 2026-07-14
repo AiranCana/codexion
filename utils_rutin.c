@@ -6,11 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 14:32:54 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/13 16:17:01 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:20:34 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "coders.h"
+#include "coder.h"
 
 int	all_coders_finish(t_table *table)
 {
@@ -32,7 +32,6 @@ static int	operations_dead(t_table *table)
 	pthread_cond_broadcast(&table -> cond);
 	return (1);
 }
-
 
 int	found_dead(t_table *table)
 {
@@ -76,4 +75,11 @@ int	verif_bornout(t_coder *coder)
 		i++;
 	}
 	return (!count);
+}
+
+void	printer_coder(t_coder *coder)
+{
+	pthread_mutex_lock(&coder -> table -> mutex);
+	print_coder(coder);
+	pthread_mutex_unlock(&coder -> table -> mutex);
 }

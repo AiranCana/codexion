@@ -1,28 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/19 15:48:06 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 15:12:20 by acanadil         ###   ########.fr       */
+/*   Created: 2026/01/14 12:19:35 by acanadil          #+#    #+#             */
+/*   Updated: 2026/07/14 11:02:03 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "coders/utils.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+int	ft_atoi(const char *nptr)
 {
-	void	*allo;
+	int	num;
+	int	sign;
 
-	if (!nmemb || !size)
+	sign = 1;
+	num = 0;
+	while (*nptr == 32 || (*nptr >= 9 && *nptr <= 13))
+		++nptr;
+	if (0 == ft_isdigit(*nptr))
 	{
-		return (malloc(0));
+		if (*nptr == '+' || *nptr == '-')
+		{
+			if (*nptr == '-')
+				sign *= -1;
+		}
+		else
+			return (0);
+		++nptr;
 	}
-	allo = malloc(nmemb * size);
-	if (!allo)
-		return (NULL);
-	ft_bzero(allo, size * nmemb);
-	return (allo);
+	while (*nptr && 0 != ft_isdigit(*nptr))
+	{
+		num *= 10;
+		num += (*(nptr++) - 48);
+	}
+	return (num * sign);
 }

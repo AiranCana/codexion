@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memlen.c                                        :+:      :+:    :+:   */
+/*   coder.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/19 10:22:30 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/19 10:22:30 by acanadil         ###   ########.fr       */
+/*   Created: 2026/07/14 10:59:24 by acanadil          #+#    #+#             */
+/*   Updated: 2026/07/14 11:01:34 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#ifndef CODER_H
+# define CODER_H
 
-size_t	ft_memlen(const void *s)
-{
-	size_t	len;
+# include "coders/coders.h"
+# include "coders/generate.h"
+# include "coders/utils.h"
 
-	len = 0;
-	while (((char *)s)[len])
-		len++;
-	return (len);
-}
+#endif

@@ -6,11 +6,11 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 12:29:30 by acanadil          #+#    #+#             */
-/*   Updated: 2026/06/18 15:27:50 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/07/14 11:02:44 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "coders/utils.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
