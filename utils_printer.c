@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/05 12:16:03 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/05 16:21:30 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/05 16:29:09 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ int	print_text(t_table *table)
 	printf("%lli %i %s", text -> time, text -> id, text -> text);
 	leter = "has burned out\n";
 	result = ft_strcmp(text -> text, leter);
-	free_last_text(table);
 	free_last_text(table);
 	return (result != 0);
 }
