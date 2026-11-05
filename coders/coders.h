@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:20:22 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/05 16:11:02 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,22 @@ typedef struct s_coder
 	t_data		*data;
 }	t_coder;
 
+typedef struct s_list_text
+{
+	int					id;
+	long long			time;
+	char				*text;
+	struct s_list_text	*next;
+	struct s_list_text	*prev;
+}	t_text;
+
 typedef struct s_table
 {
 	pthread_t		thread_id;
 	pthread_mutex_t	mutex;
 	pthread_cond_t	cond;
 	t_coder			**coders;
+	t_text			*text;
 	int				failed;
 }	t_table;
 
@@ -99,5 +109,8 @@ void		wait_time(t_coder *coder);
 int			all_coders_finish(t_table *table);
 int			found_dead(t_table *table);
 int			verif_bornout(t_coder *coder);
+void		add_first_text(t_coder *coder, char *text, long long time, int id);
+t_text		*get_last_text(t_table *table);
+void		free_texts(t_table *table);
 
 #endif

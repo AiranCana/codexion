@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 12:14:49 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/05 16:12:25 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@ void	print_coder(t_coder *coder)
 		leter = "is refactoring\n";
 	else if (coder -> state == BURNED_OUT)
 		leter = "has burned out\n";
-	if (leter && verif_bornout(coder))
-		printf(
-			"%lli %i %s", time - coder -> first_compile_start,
-			coder -> coder_id, leter);
+	if (leter)
+		add_first_text(coder, ft_strdup(leter), time, coder -> coder_id);
 }
 
 static void	operate_pthread(t_coder *coder, long long *born)
@@ -124,13 +122,15 @@ void	*rutine_table(void *arg)
 	t_table	*table;
 	int		i;
 	int		found;
+	int		result;
 
 	found = 0;
 	table = (t_table *)arg;
 	while (!found)
 	{
 		pthread_mutex_lock(&table -> mutex);
-		if (table -> failed)
+		result = found_dead(table);
+		if (!result)
 			found = 1;
 		else
 			found = found_dead(table);

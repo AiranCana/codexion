@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:06:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 10:46:41 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/05 15:42:41 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ long	ft_atol(const char *str);
 int		ft_atoi(const char *nptr);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif

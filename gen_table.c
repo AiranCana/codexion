@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 10:52:46 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:02:59 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/05 16:08:19 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	delete_table(t_table *table)
 {
 	if (table -> coders)
 		delet_coders(table -> coders);
+	if (table -> text)
+		free_texts(table);
 	pthread_cond_destroy(&table -> cond);
 	pthread_mutex_destroy(&table -> mutex);
 	free(table);
