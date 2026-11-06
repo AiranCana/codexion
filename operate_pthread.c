@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/05 16:12:25 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 15:08:24 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,18 @@ static void	operate_pthread(t_coder *coder, long long *born)
 	}
 	dropusb(&coder);
 	coder -> compile_count++;
-	coder -> state = DEBUGGING;
+	asign_state(coder, DEBUGGING);
 	printer_coder(coder);
 	if (!ft_sleep(coder -> data -> time_to_debug, &coder))
 		return ;
-	coder -> state = REFACTORING;
+	asign_state(coder, REFACTORING);
 	printer_coder(coder);
 	if (!ft_sleep(coder -> data -> time_to_refactor, &coder))
 		return ;
 	if (coder -> compile_count == coder -> data -> number_of_compiles_required)
-		coder -> state = FINISH;
+		asign_state(coder, FINISH);
 	else
-		coder -> state = IDLE;
+		asign_state(coder, IDLE);
 }
 
 static int	verif_usb_and_bornout(long long *born, t_coder *coder)
@@ -120,21 +120,16 @@ void	*ruotine(void *arg)
 void	*rutine_table(void *arg)
 {
 	t_table	*table;
-	int		i;
 	int		found;
-	int		result;
 
 	found = 0;
 	table = (t_table *)arg;
 	while (!found)
 	{
 		pthread_mutex_lock(&table -> mutex);
-		result = found_dead(table);
-		if (!result)
-			found = 1;
-		else
-			found = found_dead(table);
 		if (all_coders_finish(table))
+			found = 1;
+		if (!print_text(table))
 			found = 1;
 		pthread_mutex_unlock(&table -> mutex);
 		if (!found)

@@ -6,13 +6,13 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 13:10:49 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:03:31 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 12:25:33 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coder.h"
 
-static int	prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder)
+int	prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder)
 {
 	long long	born;
 	long long	other_born;
@@ -36,22 +36,27 @@ static int	prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder)
 
 int	priority(t_coder *this_coder, t_table *table)
 {
-	int		i;
-	t_coder	*coder;
-	t_data	*data;
+	t_coder		*coder;
+	int			position;
+	t_data		*data;
+	const void	**struc;
 
+	struc = (const void **) &table -> coders;
 	data = this_coder -> data;
-	i = 0;
-	while (table -> coders[i])
-	{
-		coder = table -> coders[i];
-		if (coder->coder_id != this_coder->coder_id && coder->state == IDLE)
-		{
-			if (!prube_scheduler(data, this_coder, coder))
-				return (0);
-		}
-		i++;
-	}
+	if (this_coder -> coder_id - 2 < 0)
+		position = (int) ft_structurlen(struc) - 1;
+	else
+		position = this_coder -> coder_id - 2;
+	coder = table -> coders[position];
+	if (!veif_priority(this_coder, data, coder))
+		return (0);
+	if (this_coder -> coder_id >= (int) ft_structurlen(struc))
+		position = 0;
+	else
+		position = this_coder -> coder_id;
+	coder = table -> coders[position];
+	if (!veif_priority(this_coder, data, coder))
+		return (0);
 	return (1);
 }
 

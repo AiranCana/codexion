@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 12:12:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:03:07 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 12:13:25 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_USB	**gen_usbs(size_t num)
 	usb = ft_calloc(sizeof(t_USB *), num + 1);
 	if (!usb)
 		return (NULL);
-	while (i < num)
+	while (i < (int) num)
 	{
 		usb[i] = gen_usb(i + 1);
 		if (!usb[i] || pthread_mutex_init(&usb[i]-> mutex, NULL) != 0)

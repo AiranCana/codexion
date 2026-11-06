@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 13:19:24 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:03:52 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 15:01:37 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,16 @@ int	available_usbs(t_coder *coder)
 		if (!coder -> left_usb -> fre || now - coder
 			-> left_usb -> cooldown_start < coder -> data -> dongle_cooldown
 			|| coder -> right_usb -> id == coder -> left_usb -> id)
+			return (0);
+	}
+	return (1);
+}
+
+int	veif_priority(t_coder *this, t_data *data, t_coder *coder)
+{
+	if (coder->coder_id != this->coder_id && coder->state == IDLE)
+	{
+		if (!prube_scheduler(data, this, coder))
 			return (0);
 	}
 	return (1);

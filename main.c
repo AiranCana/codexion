@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 10:51:03 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:03:15 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 12:13:12 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	main(int argc, char **argv)
 		arg = ft_structurlen((const void **) args);
 		spliter = 1;
 	}
-	else if (argc == 9)
+	else
 	{
 		args = argv + 1;
 		arg = argc - 1;

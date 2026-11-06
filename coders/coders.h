@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/05 16:11:02 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 16:16:30 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,11 @@ int			all_coders_finish(t_table *table);
 int			found_dead(t_table *table);
 int			verif_bornout(t_coder *coder);
 void		add_first_text(t_coder *coder, char *text, long long time, int id);
-t_text		*get_last_text(t_table *table);
+t_text		*get_min_time_text(t_table *table);
 void		free_texts(t_table *table);
+int			prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder);
+int			print_text(t_table *table);
+int			veif_priority(t_coder *this, t_data *data, t_coder *coder);
+void		asign_state(t_coder *coder, int state);
 
 #endif

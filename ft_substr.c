@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 12:29:30 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:02:44 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 11:27:09 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (ft_strdup(""));
 	if (start + len > ft_strlen(s))
 		len = ft_strlen(s) - start;
-	leter = malloc(sizeof (char) * (len + 1));
+	leter = ft_calloc(sizeof (char), (len + 1));
 	if (!leter)
 		return (NULL);
 	s += start;

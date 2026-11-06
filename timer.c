@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 15:52:40 by acanadil          #+#    #+#             */
-/*   Updated: 2026/07/14 11:03:43 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/06 13:24:49 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,11 @@ void	wait_time(t_coder *coder)
 		&coder -> table -> cond,
 		&coder -> table -> mutex,
 		&ts);
+}
+
+void	asign_state(t_coder *coder, int state)
+{
+	pthread_mutex_lock(&coder -> table -> mutex);
+	coder -> state = state;
+	pthread_mutex_unlock(&coder -> table -> mutex);
 }
