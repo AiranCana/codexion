@@ -9,24 +9,23 @@ filósofos comensales. En lugar de filósofos y tenedores, un grupo de **persona
 programan** ("coders") se sienta alrededor de una mesa circular y compite por un número
 limitado de **dongles USB** para poder compilar su código.
  
-Cada coder alterna entre tres fases: **compilar**, **depurar** y **refactorizar**.
-Compilar requiere adquirir simultáneamente los dos dongles adyacentes (izquierdo y
-derecho); depurar y refactorizar no requieren ningún dongle. Tras liberar un dongle,
-este entra en un periodo de **enfriamiento** (`dongle_cooldown`) durante el cual nadie
-puede volver a tomarlo. Si un coder no logra empezar a compilar dentro de
-`time_to_burnout` milisegundos desde el inicio de su última compilación (o desde el
-arranque de la simulación), se **agota** y la simulación se detiene.
+Cada coder repite un ciclo de tres fases: **compilar**, **depurar** y **refactorizar**.
+Compilar requiere tener a la vez los dos dongles adyacentes (izquierdo y derecho);
+depurar y refactorizar no necesitan ninguno. Tras liberar un dongle, este entra en un
+periodo de **enfriamiento** (`dongle_cooldown`) durante el cual nadie puede cogerlo.
+Si un coder no consigue empezar a compilar antes de `time_to_burnout` milisegundos
+desde el inicio de su última compilación (o desde el arranque), se **agota**
+(*burned out*) y la simulación se detiene. La simulación también termina cuando todos
+los coders han completado `number_of_compiles_required` compilaciones.
  
-El objetivo del proyecto es implementar esta simulación en C usando hilos POSIX
-(`pthread`) y mutexes, garantizando:
+El proyecto está escrito en C con hilos POSIX (`pthread`), mutexes y variables de
+condición, y garantiza:
  
-- Que nunca se dupliquen ni se corrompan los dongles (exclusión mutua correcta).
-- Que se respete el enfriamiento obligatorio de cada dongle.
-- Que el arbitraje entre coders que compiten por el mismo dongle sea justo, según la
-  política de scheduling elegida (`fifo` o `edf`).
-- Que, si los parámetros son viables, **nadie se agote nunca**.
-- Que la detección de agotamiento sea precisa (dentro de un margen de 10 ms) y que el
-  log de eventos esté correctamente serializado.
+- Exclusión mutua correcta sobre los dongles.
+- Respeto del enfriamiento de cada dongle.
+- Arbitraje entre coders vecinos según la política elegida (`fifo` o `edf`).
+- Un log de eventos serializado y ordenado por marca de tiempo.
+- Una parada ordenada de todos los hilos y la liberación de toda la memoria.
 ## Instrucciones
  
 ### Compilación
@@ -38,7 +37,7 @@ make fclean # elimina los archivos objeto y el binario
 make re     # fclean + all
 ```
  
-El proyecto compila con `cc` y las flags `-Wall -Wextra -Werror -pthread`, sin relink.
+Se compila con `cc` y las flags `-Wall -Wextra -Werror -pthread`, sin relink.
  
 ### Ejecución
  
@@ -47,7 +46,8 @@ El proyecto compila con `cc` y las flags `-Wall -Wextra -Werror -pthread`, sin r
            time_to_refactor number_of_compiles_required dongle_cooldown scheduler
 ```
  
-También se admite pasar todos los argumentos como una única cadena entre comillas:
+También se admite pasar todos los argumentos como una única cadena entre comillas,
+separados por espacios:
  
 ```bash
 ./codexion "number_of_coders time_to_burnout time_to_compile time_to_debug time_to_refactor number_of_compiles_required dongle_cooldown scheduler"
@@ -55,18 +55,18 @@ También se admite pasar todos los argumentos como una única cadena entre comil
  
 | Argumento | Descripción |
 |---|---|
-| `number_of_coders` | Número de personas que programan (y de dongles). |
+| `number_of_coders` | Número de coders (y de dongles). |
 | `time_to_burnout` | ms sin empezar a compilar antes de agotarse. |
 | `time_to_compile` | ms que dura una compilación. |
-| `time_to_debug` | ms que dura la fase de depuración. |
-| `time_to_refactor` | ms que dura la fase de refactorización. |
+| `time_to_debug` | ms que dura la depuración. |
+| `time_to_refactor` | ms que dura la refactorización. |
 | `number_of_compiles_required` | Compilaciones que debe completar cada coder para terminar. |
 | `dongle_cooldown` | ms de enfriamiento tras liberar un dongle. |
 | `scheduler` | `fifo` o `edf`. |
  
-Todos los argumentos son obligatorios y deben ser enteros positivos válidos (se
-rechazan números negativos, no enteros, valores fuera de rango, o un scheduler distinto
-de `fifo`/`edf`).
+Los ocho argumentos son obligatorios. Los siete primeros deben ser enteros positivos
+(se rechazan negativos, no numéricos y valores fuera de rango) y el último debe ser
+`fifo` o `edf`.
  
 Ejemplo:
  
@@ -74,88 +74,105 @@ Ejemplo:
 ./codexion 5 800 300 300 100 6 200 fifo
 ```
  
+### Formato de salida
+ 
+Cada línea tiene la forma `<ms> <id_coder> <mensaje>`, donde `<ms>` son los
+milisegundos desde el inicio del coder. Los mensajes posibles son:
+ 
+```
+has taken a dongle
+is compiling
+is debugging
+is refactoring
+has burned out
+```
+ 
+### Estructura del código
+ 
+| Fichero | Contenido |
+|---|---|
+| `main.c` | Punto de entrada, gestión de argumentos y errores, orquestación. |
+| `parser.c` | Validación de argumentos y creación de los coders. |
+| `gen_structurs.c` | Creación y destrucción de coders y de los datos de configuración. |
+| `gen_table.c` | Creación y destrucción de la mesa (mutex, condición, cola de log). |
+| `gen_usb.c` | Creación y destrucción de los dongles. |
+| `utilsUsb.c` | Asignación de dongles, toma/liberación, disponibilidad y prioridad. |
+| `priority.c` | Políticas `fifo`/`edf`, comprobación de vecinos y arranque de hilos. |
+| `operate_pthread.c` | Rutina de cada coder y rutina del hilo monitor. |
+| `utils_printer.c` | Cola de mensajes del log y su impresión ordenada. |
+| `timer.c` | Tiempo, sleeps interrumpibles y espera con `pthread_cond_timedwait`. |
+| `utils_rutin.c` | Utilidades de estado (fin de todos los coders, impresión protegida). |
+ 
 ## Recursos
  
-- [The Little Book of Semaphores – Allen B. Downey](https://greenteapress.com/wp/semaphores/) — referencia clásica sobre sincronización con mutexes, variables de condición y el problema de los filósofos comensales, en el que se inspira este proyecto.
-- [POSIX Threads Programming (LLNL)](https://hpc-tutorials.llnl.gov/posix/) — guía de referencia sobre `pthread_create`, `pthread_mutex_t` y `pthread_cond_t`.
-- [man 3 pthread_cond_timedwait](https://man7.org/linux/man-pages/man3/pthread_cond_timedwait.3p.html) — documentación de la función usada para las esperas con timeout sin busy-waiting.
-- Liu, C. L.; Layland, J. (1973). *Scheduling Algorithms for Multiprogramming in a Hard-Real-Time Environment* — trabajo original que formaliza el algoritmo EDF (Earliest Deadline First) usado como scheduler alternativo en este proyecto.
+- [The Little Book of Semaphores – Allen B. Downey](https://greenteapress.com/wp/semaphores/) — referencia clásica sobre sincronización y el problema de los filósofos comensales.
+- [POSIX Threads Programming (LLNL)](https://hpc-tutorials.llnl.gov/posix/) — guía sobre `pthread_create`, `pthread_mutex_t` y `pthread_cond_t`.
+- [man 3 pthread_cond_timedwait](https://man7.org/linux/man-pages/man3/pthread_cond_timedwait.3p.html) — documentación de la espera con límite de tiempo.
+- Liu, C. L.; Layland, J. (1973). *Scheduling Algorithms for Multiprogramming in a Hard-Real-Time Environment* — trabajo original que formaliza EDF (*Earliest Deadline First*).
 ### Uso de IA
  
-Se ha utilizado un asistente de IA (Claude, de Anthropic) durante el desarrollo de este
-proyecto, principalmente como herramienta de depuración guiada y de segunda opinión,
-no como generador de código de la solución final. Usos concretos:
+Se ha utilizado un asistente de IA (Claude, de Anthropic) como herramienta de revisión
+y segunda opinión, no como generador de la solución final. Usos concretos:
  
-- **Revisión de la lógica de `ft_sleep` y `verif_usb_and_bornout`**: se discutieron
-  varias versiones de las condiciones de espera hasta llegar a una que detectara el
-  agotamiento de forma correcta en cualquier fase (compilando, depurando,
-  refactorizando o esperando dongle), sin depender de un busy-wait activo.
-  Se sustituyó por `pthread_cond_timedwait` construyendo el `timespec` a partir de
-  `gettimeofday` (ya que `clock_gettime` no está en la lista de funciones permitidas).
-
-Todo el código generado o sugerido fue revisado, probado con distintos conjuntos de
-parámetros (incluyendo casos límite construidos a propósito) y comprendido línea a
-línea antes de incorporarse, siguiendo las buenas prácticas indicadas en el enunciado.
+- **Lógica de espera y detección de agotamiento** (`ft_sleep`, `verif_usb_and_bornout`):
+  discusión de varias versiones hasta sustituir la espera activa por
+  `pthread_cond_timedwait`, con el `timespec` construido a partir de `gettimeofday`
+  (`clock_gettime` no está entre las funciones permitidas).
+- **Análisis de la salida de Helgrind**: interpretación de los avisos de
+  `pthread_cond_timedwait` y revisión de accesos compartidos sin proteger.
+Todo el código sugerido fue revisado, probado con distintos parámetros (incluidos casos
+límite) y comprendido antes de incorporarse.
  
-## Blocking cases handled
+## Casos de bloqueo tratados
  
-- **Prevención de interbloqueos (deadlock) y condiciones de Coffman**: cada coder
-  siempre adquiere sus dos dongles en el mismo orden relativo (derecho primero,
-  izquierdo después, dentro de `takeusb`), evitando la espera circular clásica del
-  problema de los filósofos comensales. Además, la adquisición de ambos dongles se
-  protege bajo el mutex global de la mesa (`table->mutex`) mientras se comprueba
-  disponibilidad y prioridad, de modo que ningún otro coder puede "colarse" a mitad de
-  la comprobación y dejar el sistema en un estado inconsistente.
-- **Prevención de inanición (starvation)**: el scheduler (`fifo` o `edf`) decide, entre
-  los coders que compiten por un dongle compartido, quién tiene prioridad, evitando que
-  un coder quede indefinidamente relegado frente a otros. La comprobación de prioridad
-  solo se aplica frente a coders con los que realmente se comparte al menos un dongle
-  físico (vecinos en la mesa circular), no frente a la tabla completa, para no bloquear
-  a coders que no tienen ningún conflicto de recursos real entre sí.
-- **Gestión del cooldown**: cada `t_USB` almacena su propio `cooldown_start`,
-  actualizado en `dropusb` bajo el mutex de la mesa. `available_usbs` comprueba tanto
-  que el dongle esté libre (`fre`) como que haya transcurrido `dongle_cooldown` desde
-  su liberación, antes de considerarlo disponible para un nuevo coder.
-- **Detección precisa del agotamiento**: un hilo monitor independiente (`rutine_table`)
-  recorre periódicamente el estado de todos los coders y compara
-  `now - last_compile_start` contra `time_to_burnout`, de forma centralizada — evitando
-  que la detección dependa de que cada coder individual esté precisamente en el punto
-  del código donde comprueba su propio deadline. Esto garantiza que el agotamiento se
-  detecte y registre dentro del margen de 10 ms exigido, sin importar en qué fase
-  (compilando, depurando, refactorizando o esperando dongle) se encuentre el coder en
-  el momento exacto en que expira su plazo.
-- **Serialización del log**: todos los mensajes de estado se imprimen a través de
-  `print_coder`, y las escrituras de estado compartido que preceden a la impresión
-  (toma/liberación de dongles, cambio de `state`) se realizan bajo mutex, evitando que
-  dos mensajes se entrelacen en la misma línea de salida.
-## Thread synchronization mechanisms
+- **Interbloqueo (deadlock)**: un coder nunca coge un dongle y espera por el otro. Bajo
+  `table->mutex` comprueba que **ambos** dongles están disponibles (libres y fuera de
+  enfriamiento) y que tiene prioridad, y solo entonces los toma a la vez en `takeusb`.
+  Así no se da la condición de *hold and wait* ni la espera circular. Con un solo coder
+  ambos dongles son el mismo, por lo que nunca puede compilar y acaba agotándose.
+- **Inanición (starvation)**: `priority` compara al coder solo con sus dos vecinos en la
+  mesa (los únicos con los que comparte dongle) y solo cuando están en estado `IDLE`
+  esperando. Con `fifo` tiene prioridad el que lleva más tiempo sin compilar
+  (menor `last_compile_start`); con `edf` el que tiene el plazo de agotamiento más
+  cercano (`last_compile_start + time_to_burnout`).
+- **Enfriamiento**: cada dongle guarda su `cooldown_start`, que se actualiza en
+  `dropusb` bajo el mutex de la mesa. `available_usbs` exige que el dongle esté libre y
+  que haya pasado `dongle_cooldown` desde su liberación.
+- **Detección del agotamiento**: mientras un coder espera sus dongles comprueba en cada
+  vuelta su plazo (`inicio de la última compilación + time_to_burnout`). Si vence, marca
+  su estado como `BURNED_OUT`, avisa con `pthread_cond_broadcast` y registra el mensaje.
+  El hilo monitor lo imprime y activa la bandera global `failed`.
+- **Parada ordenada**: al activarse `failed`, los coders que esperan dongles salen del
+  bucle de espera (como mucho tras 1 ms, por el timeout de la espera), los que duermen
+  en `ft_sleep` lo detectan en su siguiente comprobación (cada 0,5 ms) y `ruotine`
+  retorna. Después `start_routin` hace `pthread_join` de todos los hilos y se libera la
+  memoria.
+- **Serialización del log**: los coders no escriben en la salida. Cada evento se añade
+  a una cola bajo `table->mutex` y solo el hilo monitor imprime. En cada iteración
+  extrae el mensaje con menor marca de tiempo y, si hay empate, el más antiguo de ese
+  grupo, de modo que la salida sale ordenada aunque los hilos encolen en otro orden.
+  La impresión se detiene tras `has burned out` o cuando todos los coders han
+  terminado.
+## Mecanismos de sincronización
  
-El proyecto usa dos primitivas de sincronización de `pthread`, sin variables globales:
+El proyecto no usa variables globales y se apoya en tres primitivas de `pthread`:
  
-- **`pthread_mutex_t table->mutex`**: protege el estado compartido de la mesa (el
-  array de coders, el flag `failed`, y sirve como mutex asociado a la variable de
-  condición). Se adquiere en `verif_usb_and_bornout` antes de comprobar disponibilidad
-  de dongles y prioridad, y en `dropusb`/`rutine_table`/`found_dead` antes de modificar
-  el estado global de fallo. Cada camino de adquisición garantiza que el mutex se
-  libera en **todos** los puntos de salida de la función (incluidos los `return`
-  tempranos), para evitar dejar el mutex bloqueado indefinidamente al terminar un hilo.
-- **`pthread_mutex_t usb->mutex`**: protege el campo `fre` de cada dongle individual
-  durante `takeusb`, evitando que dos coders lean/escriban el mismo flag de
-  disponibilidad de forma concurrente.
-- **`pthread_cond_t table->cond`**: usada para que un coder que no puede tomar sus
-  dongles (`verif_usb_and_bornout`) espere de forma eficiente en vez de hacer
-  busy-waiting reteniendo el mutex. Se usa `pthread_cond_timedwait` con un timeout
-  corto (~1 ms), construido manualmente a partir de `gettimeofday` (ya que
-  `clock_gettime` no está entre las funciones permitidas). Esto permite que el hilo
-  ceda el mutex mientras espera, se despierte inmediatamente cuando otro hilo hace
-  `pthread_cond_broadcast` (por ejemplo, al liberar un dongle en `dropusb`, o al
-  declararse un fallo global), y como fallback re-evalúe su condición cada milisegundo
-  aproximadamente por si el evento de despertar se hubiera perdido.
+- **`pthread_mutex_t table->mutex`**: protege el estado compartido de la mesa (estado de
+  los coders, dongles, bandera `failed` y cola de mensajes) y es el mutex asociado a la
+  variable de condición. Se toma en `verif_usb_and_bornout`, `dropusb`, `asign_state`,
+  `printer_coder` y en el bucle del monitor, y se libera en todos los caminos de salida.
+- **`pthread_mutex_t usb->mutex`**: uno por dongle, tomado en `takeusb` al marcar cada
+  dongle como ocupado.
+- **`pthread_cond_t table->cond`**: permite que un coder sin dongles espere sin consumir
+  CPU y liberando el mutex. Se usa `pthread_cond_timedwait` con un timeout de ~1 ms,
+  construido con `gettimeofday`. Se despierta antes si otro hilo hace `broadcast`
+  (al liberar dongles en `dropusb` o al declararse un agotamiento), y el timeout sirve
+  de red de seguridad para reevaluar la condición, ya que el enfriamiento de un dongle
+  expira con el tiempo y no genera ninguna señal.
 ### Ejemplo de cómo se evitan las condiciones de carrera
  
-Antes de tomar un dongle, un coder mantiene el mutex de la mesa bloqueado durante toda
-la comprobación de `available_usbs()` + `priority()` y la posterior llamada a
-`takeusb()`, de forma atómica:
+Un coder mantiene el mutex de la mesa durante toda la comprobación de disponibilidad y
+prioridad y la posterior toma de dongles, de forma atómica:
  
 ```c
 pthread_mutex_lock(&coder->table->mutex);
@@ -163,24 +180,20 @@ while ((!available_usbs(coder) || !priority(coder, coder->table))
     && !coder->table->failed)
 {
     if (verif_time(deadline))
-    { /* declarar burned out */ }
-    wait_time(coder); /* pthread_cond_timedwait, libera el mutex mientras espera */
+    { /* marcar BURNED_OUT, broadcast, unlock y salir */ }
+    wait_time(coder); /* pthread_cond_timedwait: libera el mutex mientras espera */
 }
 if (!coder->table->failed)
-    takeusb(&coder); /* toma ambos dongles sin que nadie más pueda interferir */
+    takeusb(&coder); /* toma ambos dongles sin interferencias */
 pthread_mutex_unlock(&coder->table->mutex);
 ```
  
-Esto asegura que ningún otro hilo pueda cambiar la disponibilidad de un dongle entre el
-momento en que se comprueba y el momento en que se marca como ocupado.
+Ningún otro hilo puede cambiar la disponibilidad de un dongle entre la comprobación y
+el momento en que se marca como ocupado.
  
-### Comunicación thread-safe entre coders y el monitor
+### Comunicación entre coders y monitor
  
-Los coders **no se comunican entre sí ni consultan el estado de otros coders**
-directamente. La única señal compartida es `table->failed`, un entero protegido por
-`table->mutex`, escrito exclusivamente por el hilo monitor (`rutine_table` /
-`found_dead`) al detectar un agotamiento o la finalización de todos los coders, y leído
-por cada coder para decidir si debe detenerse. Esto respeta la restricción del
-enunciado de que "las personas no se comunican entre sí" ni "saben si otra está a
-punto de agotarse": ningún coder inspecciona el estado interno de otro coder concreto,
-solo consulta la bandera global calculada de forma centralizada por el monitor.
+Los coders no se comunican directamente. La única señal global es `table->failed`, que
+escribe el hilo monitor al imprimir un agotamiento (o `start_routin` si falla la
+creación de un hilo) y que cada coder lee para saber si debe detenerse. El monitor
+también finaliza cuando todos los coders han alcanzado el estado `FINISH`.

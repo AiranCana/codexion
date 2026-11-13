@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/06 15:08:24 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 11:32:51 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	print_coder(t_coder *coder)
 	else if (coder -> state == BURNED_OUT)
 		leter = "has burned out\n";
 	if (leter)
-		add_first_text(coder, ft_strdup(leter), time, coder -> coder_id);
+		add_first_text(coder, leter, time, coder -> coder_id);
 }
 
 static void	operate_pthread(t_coder *coder, long long *born)
@@ -130,7 +130,10 @@ void	*rutine_table(void *arg)
 		if (all_coders_finish(table))
 			found = 1;
 		if (!print_text(table))
+		{
 			found = 1;
+			table -> failed = 1;
+		}
 		pthread_mutex_unlock(&table -> mutex);
 		if (!found)
 			usleep(500);

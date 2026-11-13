@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 15:52:40 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/06 13:24:49 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 11:46:01 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,15 @@ int	ft_sleep(long long time, t_coder **coder)
 	start = get_time();
 	while ((get_time() - start) < time)
 	{
+		pthread_mutex_lock(&(*coder)-> table -> mutex);
 		if ((*coder)-> table -> failed || (((*coder)-> state == BURNED_OUT
 					&& verif_time((*coder)-> first_compile_start
 						+ (*coder)-> data -> time_to_burnout))))
+		{
+			pthread_mutex_unlock(&(*coder)-> table -> mutex);
 			return (0);
+		}
+		pthread_mutex_unlock(&(*coder)-> table -> mutex);
 		usleep(500);
 	}
 	return (1);

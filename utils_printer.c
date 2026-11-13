@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/05 12:16:03 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/06 16:32:29 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 11:33:17 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	free_min_time_text(t_table *table)
 		table -> text = current -> next;
 	if (current -> next)
 		current -> next -> prev = current -> prev;
-	free(current -> text);
 	free(current);
 }
 
@@ -75,7 +74,6 @@ void	free_texts(t_table *table)
 	while (current)
 	{
 		next = current -> next;
-		free(current -> text);
 		free(current);
 		current = next;
 	}
