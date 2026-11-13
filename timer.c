@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/23 15:52:40 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/13 11:46:01 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 17:38:15 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,7 @@ void	asign_state(t_coder *coder, int state)
 {
 	pthread_mutex_lock(&coder -> table -> mutex);
 	coder -> state = state;
+	if (state == IDLE)
+		coder -> wait_start = get_time();
 	pthread_mutex_unlock(&coder -> table -> mutex);
 }

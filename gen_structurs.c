@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:26:13 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/06 11:52:58 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 17:04:33 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_coder	*gen_coder(int coder_id, t_data *data, t_table *table)
 	coder -> coder_id = coder_id;
 	coder -> last_compile_start = 0;
 	coder -> thread_id = 0;
+	coder -> wait_start = 0;
 	coder -> compile_count = 0;
 	return (coder);
 }

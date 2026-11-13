@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:13:11 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/06 16:16:30 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 18:18:41 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_coder
 	t_USB		*left_usb;
 	long long	first_compile_start;
 	long long	last_compile_start;
+	long long	wait_start;
 	int			compile_count;
 	int			bornout_log;
 	int			coder_id;
@@ -114,7 +115,7 @@ t_text		*get_min_time_text(t_table *table);
 void		free_texts(t_table *table);
 int			prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder);
 int			print_text(t_table *table);
-int			veif_priority(t_coder *this, t_data *data, t_coder *coder);
+int			verif_priority(t_coder *this, t_data *data, t_coder *coder);
 void		asign_state(t_coder *coder, int state);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 10:48:56 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/13 11:32:51 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 18:16:47 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	verif_usb_and_bornout(long long *born, t_coder *coder)
 		}
 		wait_time(coder);
 	}
-	if (coder -> table -> failed)
+	if (coder -> table -> failed || verif_time(time))
 	{
 		pthread_mutex_unlock(&coder -> table -> mutex);
 		return (0);

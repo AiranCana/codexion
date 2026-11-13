@@ -6,7 +6,7 @@
 /*   By: acanadil <acanadil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 13:10:49 by acanadil          #+#    #+#             */
-/*   Updated: 2026/11/06 12:25:33 by acanadil         ###   ########.fr       */
+/*   Updated: 2026/11/13 18:17:55 by acanadil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,37 @@
 
 int	prube_scheduler(t_data *data, t_coder *this_coder, t_coder *coder)
 {
-	long long	born;
-	long long	other_born;
-	long long	this_born;
+	long long	mine;
+	long long	other;
 
-	born = data -> time_to_burnout;
 	if (data -> scheduler == FIFO)
 	{
-		if (coder -> last_compile_start < this_coder -> last_compile_start)
-			return (0);
+		mine = this_coder -> wait_start;
+		other = coder -> wait_start;
 	}
-	else if (data -> scheduler == EDF)
+	else
 	{
-		this_born = this_coder -> last_compile_start + born;
-		other_born = coder -> last_compile_start + born;
-		if (other_born < this_born)
-			return (0);
+		mine = this_coder -> last_compile_start + data -> time_to_burnout;
+		other = coder -> last_compile_start + data -> time_to_burnout;
 	}
+	if (other < mine
+		|| (other == mine && this_coder -> coder_id < coder -> coder_id))
+		return (0);
 	return (1);
 }
 
 int	priority(t_coder *this_coder, t_table *table)
 {
-	t_coder		*coder;
-	int			position;
+	int			n;
+	int			i;
 	t_data		*data;
-	const void	**struc;
 
-	struc = (const void **) &table -> coders;
 	data = this_coder -> data;
-	if (this_coder -> coder_id - 2 < 0)
-		position = (int) ft_structurlen(struc) - 1;
-	else
-		position = this_coder -> coder_id - 2;
-	coder = table -> coders[position];
-	if (!veif_priority(this_coder, data, coder))
+	n = this_coder -> data -> num_coders;
+	i = this_coder -> coder_id;
+	if (!verif_priority(this_coder, data, table -> coders[(i + n - 1) % n]))
 		return (0);
-	if (this_coder -> coder_id >= (int) ft_structurlen(struc))
-		position = 0;
-	else
-		position = this_coder -> coder_id;
-	coder = table -> coders[position];
-	if (!veif_priority(this_coder, data, coder))
+	if (!verif_priority(this_coder, data, table -> coders[(i + 1) % n]))
 		return (0);
 	return (1);
 }
@@ -99,6 +88,7 @@ int	start_routin(t_table *table)
 		{
 			pthread_mutex_lock(&table -> mutex);
 			table -> failed = 1;
+			table -> coders[i]-> wait_start = get_time();
 			pthread_cond_broadcast(&table -> cond);
 			pthread_mutex_unlock(&table -> mutex);
 			wait_codex(table, i);
